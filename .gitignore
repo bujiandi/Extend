@@ -1,0 +1,7 @@
+/.DS_Store
+xcschememanagement.plist
+*.xcscheme
+*.xcuserstate
+WorkspaceSettings.xcsettings
+*.xcworkspacedata
+IDEWorkspaceChecks.plist
