@@ -7,45 +7,8 @@
 //
 
 import SQLite3
-//import SQLite3
 import Foundation
-//#if SQLITE_SWIFT_STANDALONE
-//import sqlite3
-//#else
-//import CSQLite
-//#endif
 
-// MARK: - protocols 接口(创建数据表需用枚举实现以下接口)
-/// 注: enum OneTable: String, DBTableType
-public protocol DBTableType: RawRepresentable, CaseIterable, Hashable {
-    static var table_name:String { get }
-    
-    var type: DataBaseColumnType { get }
-    var option: DataBaseColumnOptions { get }
-    
-    // optional
-    var defaultValue:CustomStringConvertible? { get }
-}
-
-// MARK: - 遍历枚举
-extension DBTableType {
-    public var defaultValue:CustomStringConvertible? { return nil }
-    
-    fileprivate static func enumerateEnum<T: Hashable>(_: T.Type) -> AnyIterator<T> {
-        var i = 0
-        return AnyIterator {
-            let next = withUnsafePointer(to: &i) { p in
-                p.withMemoryRebound(to: T.self, capacity: 1) { $0.pointee }
-            }
-            defer { i += 1 }
-            return next.hashValue == i ? next : nil
-        }
-    }
-    
-    public static func enumerate() -> AnyIterator<Self> {
-        return enumerateEnum(Self.self)
-    }
-}
 
 // MARK: - ColumnState 头附加状态
 public struct DataBaseColumnOptions : OptionSet, CustomStringConvertible {
@@ -101,461 +64,461 @@ public enum DataBaseColumnType : CInt, CustomStringConvertible {
 }
 
 // MARK: - result set 结果集
-open class DBResultSet<T:DBTableType>: IteratorProtocol, Sequence {
-    public typealias Element = DBRowSet<T>
-    
-    fileprivate var _stmt:OpaquePointer? = nil
-    fileprivate init (_ stmt:OpaquePointer) {
-        _stmt = stmt
-        let length = sqlite3_column_count(_stmt);
-        var columns:[String] = []
-        for i:CInt in 0..<length {
-            let name:UnsafePointer<CChar> = sqlite3_column_name(_stmt,i)
-            
-            columns.append(String(cString: name).lowercased())
-        }
-        //print(columns)
-        _columns = columns
-    }
-    deinit {
-        if _stmt != nil {
-            sqlite3_finalize(_stmt)
-        }
-    }
-    
-    open var row:Int {
-        return Int(sqlite3_data_count(_stmt))
-    }
-    
-    open var step:CInt {
-        return sqlite3_step(_stmt)
-    }
-    
-    open func reset() {
-        sqlite3_reset(_stmt)
-    }
-    
-    open func close() {
-        if _stmt != nil {
-            sqlite3_finalize(_stmt)
-            _stmt = nil
-        }
-    }
-    
-    open func next() -> DBRowSet<T>? {
-        return step != SQLITE_ROW ? nil : DBRowSet<T>(_stmt!, _columns)
-    }
-    
-    open func firstValue() -> Int {
-        if step == SQLITE_ROW {
-            return Int(sqlite3_column_int(_stmt, 0))
-        }
-        return 0
-    }
-    
-    fileprivate let _columns:[String]
-    open var columnCount:Int { return _columns.count }
-    open var isClosed:Bool { return _stmt == nil }
-}
-
-// MARK: rowset 基础
-open class DBRowSetBase {
-    fileprivate var _stmt:OpaquePointer? = nil
-    fileprivate let _columns:[String]
-    
-    fileprivate init (_ stmt:OpaquePointer,_ columns:[String]) {
-        _stmt = stmt
-        _columns = columns
-    }
-    
-    open func getDictionary() -> [String:Any] {
-        var dict:[String:Any] = [:]
-        for i in 0..<_columns.count {
-            let index = CInt(i)
-            let type = sqlite3_column_type(_stmt, index);
-            let key:String = _columns[i]
-            var value:Any? = nil
-            switch type {
-            case SQLITE_INTEGER:
-                value = Int64(sqlite3_column_int64(_stmt, index))
-            case SQLITE_FLOAT:
-                value = Double(sqlite3_column_double(_stmt, index))
-            case SQLITE_TEXT:
-                let text:UnsafePointer<UInt8> = sqlite3_column_text(_stmt, index)
-                value = String(cString: text)
-            case SQLITE_BLOB:
-                let data:UnsafeRawPointer = sqlite3_column_blob(_stmt, index)
-                let size:CInt = sqlite3_column_bytes(_stmt, index)
-                value = Data(bytes: data, count: Int(size))
-            case SQLITE_NULL:   fallthrough     //下降关键字 执行下一 CASE
-            default :           break           //什么都不执行
-            }
-            dict[key] = value
-//            //如果出现重名则
-//            if i != columnNames.indexOfObject(key) {
-//                //取变量类型
-//                //let tableName = String.fromCString(sqlite3_column_table_name(stmt, index))
-//                //dict["\(tableName).\(key)"] = value
-//                dict["\(key).\(i)"] = value
-//            } else {
-//                dict[key] = value
+//open class DBResultSet<T:DBTableType>: IteratorProtocol, Sequence {
+//    public typealias Element = DBRowSet<T>
+//
+//    fileprivate var _stmt:OpaquePointer? = nil
+//    fileprivate init (_ stmt:OpaquePointer) {
+//        _stmt = stmt
+//        let length = sqlite3_column_count(_stmt);
+//        var columns:[String] = []
+//        for i:CInt in 0..<length {
+//            let name:UnsafePointer<CChar> = sqlite3_column_name(_stmt,i)
+//
+//            columns.append(String(cString: name).lowercased())
+//        }
+//        //print(columns)
+//        _columns = columns
+//    }
+//    deinit {
+//        if _stmt != nil {
+//            sqlite3_finalize(_stmt)
+//        }
+//    }
+//
+//    open var row:Int {
+//        return Int(sqlite3_data_count(_stmt))
+//    }
+//
+//    open var step:CInt {
+//        return sqlite3_step(_stmt)
+//    }
+//
+//    open func reset() {
+//        sqlite3_reset(_stmt)
+//    }
+//
+//    open func close() {
+//        if _stmt != nil {
+//            sqlite3_finalize(_stmt)
+//            _stmt = nil
+//        }
+//    }
+//
+//    open func next() -> DBRowSet<T>? {
+//        return step != SQLITE_ROW ? nil : DBRowSet<T>(_stmt!, _columns)
+//    }
+//
+//    open func firstValue() -> Int {
+//        if step == SQLITE_ROW {
+//            return Int(sqlite3_column_int(_stmt, 0))
+//        }
+//        return 0
+//    }
+//
+//    fileprivate let _columns:[String]
+//    open var columnCount:Int { return _columns.count }
+//    open var isClosed:Bool { return _stmt == nil }
+//}
+//
+//// MARK: rowset 基础
+//open class DBRowSetBase {
+//    fileprivate var _stmt:OpaquePointer? = nil
+//    fileprivate let _columns:[String]
+//
+//    fileprivate init (_ stmt:OpaquePointer,_ columns:[String]) {
+//        _stmt = stmt
+//        _columns = columns
+//    }
+//
+//    open func getDictionary() -> [String:Any] {
+//        var dict:[String:Any] = [:]
+//        for i in 0..<_columns.count {
+//            let index = CInt(i)
+//            let type = sqlite3_column_type(_stmt, index);
+//            let key:String = _columns[i]
+//            var value:Any? = nil
+//            switch type {
+//            case SQLITE_INTEGER:
+//                value = Int64(sqlite3_column_int64(_stmt, index))
+//            case SQLITE_FLOAT:
+//                value = Double(sqlite3_column_double(_stmt, index))
+//            case SQLITE_TEXT:
+//                let text:UnsafePointer<UInt8> = sqlite3_column_text(_stmt, index)
+//                value = String(cString: text)
+//            case SQLITE_BLOB:
+//                let data:UnsafeRawPointer = sqlite3_column_blob(_stmt, index)
+//                let size:CInt = sqlite3_column_bytes(_stmt, index)
+//                value = Data(bytes: data, count: Int(size))
+//            case SQLITE_NULL:   fallthrough     //下降关键字 执行下一 CASE
+//            default :           break           //什么都不执行
 //            }
-        }
-        
-        return dict
-    }
-    open func getInt64(_ columnIndex:Int) -> Int64 {
-        return sqlite3_column_int64(_stmt, CInt(columnIndex))
-    }
-    open func getUInt64(_ columnIndex:Int) -> UInt64 {
-        return UInt64(bitPattern: getInt64(columnIndex))
-    }
-    open func getInt(_ columnIndex:Int) -> Int {
-        return Int(truncatingIfNeeded: getInt64(columnIndex))
-    }
-    open func getUInt(_ columnIndex:Int) -> UInt {
-        return UInt(truncatingIfNeeded: getInt64(columnIndex))
-    }
-    open func getInt8(_ columnIndex:Int) -> Int8 {
-        return Int8(truncatingIfNeeded: getInt64(columnIndex))
-    }
-    open func getUInt8(_ columnIndex:Int) -> UInt8 {
-        return UInt8(truncatingIfNeeded: getInt64(columnIndex))
-    }
-    open func getInt32(_ columnIndex:Int) -> Int32 {
-        return Int32(truncatingIfNeeded: getInt64(columnIndex))
-    }
-    open func getUInt32(_ columnIndex:Int) -> UInt32 {
-        return UInt32(truncatingIfNeeded: getInt64(columnIndex))
-    }
-    open func getBool(_ columnIndex:Int) -> Bool {
-        return getInt64(columnIndex) != 0
-    }
-    open func getFloat(_ columnIndex:Int) -> Float {
-        return Float(sqlite3_column_double(_stmt, CInt(columnIndex)))
-    }
-    open func getDouble(_ columnIndex:Int) -> Double {
-        return sqlite3_column_double(_stmt, CInt(columnIndex))
-    }
-    open func getString(_ columnIndex:Int) -> String? {
-        guard let result = sqlite3_column_text(_stmt, CInt(columnIndex)) else {
-            return nil
-        }
-        return String(cString: result)
-    }
-    
-    open func getColumnIndex(_ columnName: String) -> Int {
-        return _columns.firstIndex(where: { $0 == columnName.lowercased() }) ?? NSNotFound
-    }
-    
-    open var columnCount:Int { return _columns.count }
-}
-
-open class DBRowSet<T:DBTableType>: DBRowSetBase {
-    fileprivate override init(_ stmt: OpaquePointer,_ columns:[String]) {
-        super.init(stmt, columns)
-    }
-    
-    public init <U>(_ rs:DBRowSet<U>) {
-        super.init(rs._stmt!, rs._columns)
-    }
-    
-    open func getColumnIndex(_ column: T) -> Int {
-        return _columns.firstIndex(where: { $0 == "\(column)".lowercased() }) ?? NSNotFound
-    }
-    
-    
-    open func getUInt(_ column: T) -> UInt {
-        return UInt(truncatingIfNeeded: getInt64(column))
-    }
-    open func getBool(_ column: T) -> Bool {
-        return getInt64(column) != 0
-    }
-    open func getInt(_ column: T) -> Int {
-        return Int(truncatingIfNeeded: getInt64(column))
-    }
-    open func getInt64(_ column: T) -> Int64 {
-        guard let index = _columns.firstIndex(where: { $0 == "\(column)".lowercased() }) else {
-            return 0
-        }
-        return sqlite3_column_int64(_stmt, CInt(index))
-    }
-    open func getDouble(_ column: T) -> Double {
-        guard let index = _columns.firstIndex(where: { $0 == "\(column)".lowercased() }) else {
-            return 0
-        }
-        return sqlite3_column_double(_stmt, CInt(index))
-    }
-    open func getFloat(_ column: T) -> Float {
-        return Float(getDouble(column))
-    }
-    open func getString(_ column: T) -> String! {
-        guard let index = _columns.firstIndex(where: { $0 == "\(column)".lowercased() }) else {
-            return nil
-        }
-        guard let data = sqlite3_column_text(_stmt, CInt(index)) else {
-            return nil
-        }
-        return String(cString: data)
-    }
-    open func getData(_ column: T) -> Data! {
-        guard let index = _columns.firstIndex(where: { $0 == "\(column)".lowercased() }) else {
-            return nil
-        }
-        let data:UnsafeRawPointer = sqlite3_column_blob(_stmt, CInt(index))
-        let size:CInt = sqlite3_column_bytes(_stmt, CInt(index))
-        return Data(bytes: data, count: Int(size))
-    }
-    open func getDate(_ column: T) -> Date! {
-        guard let index = _columns.firstIndex(where: { $0 == "\(column)".lowercased() }) else {
-            return nil
-        }
-        let columnType = sqlite3_column_type(_stmt, CInt(index))
-        
-        switch columnType {
-        case SQLITE_INTEGER:
-            fallthrough
-        case SQLITE_FLOAT:
-            let time = sqlite3_column_double(_stmt, CInt(index))
-            return Date(timeIntervalSince1970: time)
-        case SQLITE_TEXT:
-            let date = String(cString: sqlite3_column_text(_stmt, CInt(index)))
-            let formater = DateFormatter()
-            formater.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            //formater.calendar = NSCalendar.currentCalendar()
-            return formater.date(from: date)
-        default:
-            return nil
-        }
-        
-    }
-}
-
-
-
-
-open class DBBindSet<T:DBTableType> {
-    
-    fileprivate var _stmt:OpaquePointer
-    fileprivate var _columns:[T]
-    init(_ stmt: OpaquePointer,_ columns:[T]) {
-        _stmt = stmt
-        _columns = columns
-    }
-    
-    open var bindCount:CInt {
-        return sqlite3_bind_parameter_count(_stmt)
-    }
-    
-    @discardableResult
-    open func bindClear() -> CInt {
-        return sqlite3_clear_bindings(_stmt)
-    }
-    
-    open func bindValue<U>(_ value:U?, column:T) throws {
-        if let index = _columns.firstIndex(of: column) {
-            if value == nil && column.option.contains(.NotNull) {
-                print("\(column) 不能为Null, 可能导致绑定失败")
-            }
-            try bindValue(value, index: index + 1)
-        } else {
-            print("SQL中不存在 列:\(column)")
-            throw DBError(domain: "SQL中不存在 列:\(column)", code: -1, userInfo: nil)
-        }
-    }
-    // 泛型绑定
-    open func bindValue<U>(_ columnValue:U?, index:Int) throws {
-        
-        var flag:CInt = SQLITE_ROW
-        if let v = columnValue {
-            switch v {
-            case _ as NSNull:
-                flag = sqlite3_bind_null(_stmt,CInt(index))
-            case _ as DataBaseNull:
-                flag = sqlite3_bind_null(_stmt,CInt(index))
-            case let value as String:
-                let string:NSString = value as NSString
-                flag = sqlite3_bind_text(_stmt,CInt(index),string.utf8String,-1,nil)
-            case let value as Int:
-                flag = sqlite3_bind_int64(_stmt,CInt(index),CLongLong(value))
-            case let value as UInt:
-                flag = sqlite3_bind_int64(_stmt,CInt(index),CLongLong(value))
-            case let value as Int8:
-                flag = sqlite3_bind_int(_stmt,CInt(index),CInt(value))
-            case let value as UInt8:
-                flag = sqlite3_bind_int(_stmt,CInt(index),CInt(value))
-            case let value as Int16:
-                flag = sqlite3_bind_int(_stmt,CInt(index),CInt(value))
-            case let value as UInt16:
-                flag = sqlite3_bind_int(_stmt,CInt(index),CInt(value))
-            case let value as Int32:
-                flag = sqlite3_bind_int(_stmt,CInt(index),CInt(value))
-            case let value as UInt32:
-                flag = sqlite3_bind_int64(_stmt,CInt(index),CLongLong(value))
-            case let value as Int64:
-                flag = sqlite3_bind_int64(_stmt,CInt(index),CLongLong(value))
-            case let value as UInt64:
-                flag = sqlite3_bind_int64(_stmt,CInt(index),CLongLong(value))
-            case let value as Float:
-                flag = sqlite3_bind_double(_stmt,CInt(index),CDouble(value))
-            case let value as Double:
-                flag = sqlite3_bind_double(_stmt,CInt(index),CDouble(value))
-            case let value as Date:
-                flag = sqlite3_bind_double(_stmt,CInt(index),CDouble(value.timeIntervalSince1970))
-                //            case let value as Date:
-            //                return sqlite3_bind_double(_stmt,CInt(index),CDouble(value.timeIntervalSince1970))
-            case let value as Data:
-                flag = sqlite3_bind_blob(_stmt,CInt(index),(value as NSData).bytes,-1,nil)
-            default:
-                let mirror = Mirror(reflecting: v)
-                if mirror.displayStyle == .optional {
-                    let children = mirror.children
-                    if children.count == 0 {
-                        flag = sqlite3_bind_null(_stmt,CInt(index))
-                    } else {
-                        try bindValue(children[children.startIndex].value, index: index)
-                    }
-                } else {
-                    let string:NSString = "\(v)" as NSString
-                    flag = sqlite3_bind_text(_stmt,CInt(index),string.utf8String,-1,nil)
-                }
-            }
-        } else {
-            flag = sqlite3_bind_null(_stmt,CInt(index))
-        }
-        if flag != SQLITE_OK && flag != SQLITE_ROW {
-            throw DBError(domain: "批量插入失败", code: Int(flag), userInfo: nil)
-        }
-    }
-}
-
-// MARK: - 数据库操作句柄
-open class DBHandle {
-    fileprivate var _handle:OpaquePointer?
-    internal init (_ handle:OpaquePointer!) { _handle = handle }
-    
-    deinit { if _handle != nil { sqlite3_close(_handle) } }
-    
-    var version:Int {
-        get {
-            var stmt:OpaquePointer? = nil
-            if SQLITE_OK == sqlite3_prepare_v2(_handle, "PRAGMA user_version", -1, &stmt, nil) {
-                defer { sqlite3_finalize(stmt) }
-                return SQLITE_ROW == sqlite3_step(stmt) ? Int(sqlite3_column_int(stmt, 0)) : 0
-            }
-            return -1
-        }
-        set { sqlite3_exec(_handle, "PRAGMA user_version = \(newValue)", nil, nil, nil) }
-    }
-    
-    open var lastError:DBError {
-        let errorCode = sqlite3_errcode(_handle)
-        let errorDescription = String(cString: sqlite3_errmsg(_handle))
-        return DBError(domain: errorDescription, code: Int(errorCode), userInfo: nil)
-    }
-    fileprivate var _lastSQL:String? //{ didSet { print(_lastSQL ?? "") } }
-    open var lastSQL:String { return _lastSQL ?? "" }
-    
-    // MARK: 执行SQL
-    open func exec(_ sql:String) throws {
-        _lastSQL = sql
-        let flag = sqlite3_exec(_handle, sql, nil, nil, nil)
-        if flag != SQLITE_OK { throw lastError }
-    }
-    open func exec(_ sql:SQLBase) throws {
-        try exec(sql.description)
-    }
-    
-    fileprivate func query(_ sql:String) throws -> OpaquePointer {
-        var stmt:OpaquePointer? = nil
-        _lastSQL = sql
-        if SQLITE_OK != sqlite3_prepare_v2(_handle, sql, -1, &stmt, nil) {
-            sqlite3_finalize(stmt)
-            throw lastError
-        }
-        return stmt! //DBRowSet(stmt)
-    }
-    
-    open var lastErrorMessage:String {
-        return String(cString: sqlite3_errmsg(_handle))
-    }
-    open var lastInsertRowID:Int64 {
-        return sqlite3_last_insert_rowid(_handle)
-    }
-    
-    
-}
-
-// MARK: - base execute sql function
-extension DBHandle {
-    // 单表查询
-    public func query<T>(_ sql:SQL<T>) throws -> DBResultSet<T> {
-        return DBResultSet<T>(try query(sql.description))
-    }
-    
-    // 双表查询
-    public func query<T1, T2>(_ sql:SQL2<T1, T2>) throws -> DBResultSet<T1> {
-        return DBResultSet<T1>(try query(sql.description))
-    }
-    
-    // 清空表
-    public func truncateTable<T:DBTableType>(_:T.Type) throws {
-        try exec(DELETE.FROM(T.self))
-        try exec(UPDATE(SQLiteSequence.self).SET[.seq == 0].WHERE(.name == T.table_name))
-    }
-    
-    // 创建表
-    public func createTable<T:DBTableType>(_:T.Type) throws {
-        try  createTable(T.self, otherSQL:"")
-    }
-    public func createTableIfNotExists<T:DBTableType>(_:T.Type) {
-        try! createTable(T.self, otherSQL:" IF NOT EXISTS")
-    }
-    fileprivate func createTable<T:DBTableType>(_:T.Type, otherSQL:String) throws {
-        var columns:[T] = []
-        var primaryKeys:[T] = []
-        for column in T.allCases where !column.option.contains(.DeletedKey) {
-            if column.option.contains(.PrimaryKey) {
-                primaryKeys.append(column)
-            }
-            columns.append(column)
-        }
-                
-        var params:String = columns.map({
-            if let value = $0.defaultValue?.description {
-                return "\($0) \($0.type)\($0.option.descriptionBy(primaryKeys.count > 1)) DEFAULT \(value)"
-            }
-            return "\($0) \($0.type)\($0.option.descriptionBy(primaryKeys.count > 1))"
-        }).joined(separator: ", ")
-
-        
-        if primaryKeys.count > 1 {
-            let keys = primaryKeys.map({ "\($0)" }).joined(separator: ", ")
-            params.append(", PRIMARY KEY (\(keys))")
-        }
-        
-        try exec("CREATE TABLE\(otherSQL) \(T.table_name) (\(params))")
-    }
-}
-
-// MARK: - transaction 事务
-extension DBHandle {
-    // MARK: 开启事务 BEGIN TRANSACTION
-    @discardableResult
-    func beginTransaction() -> CInt {
-        return sqlite3_exec(_handle,"BEGIN TRANSACTION",nil,nil,nil)
-    }
-    // MARK: 提交事务 COMMIT TRANSACTION
-    @discardableResult
-    func commitTransaction() -> CInt {
-        return sqlite3_exec(_handle,"COMMIT TRANSACTION",nil,nil,nil)
-    }
-    // MARK: 回滚事务 ROLLBACK TRANSACTION
-    @discardableResult
-    func rollbackTransaction() -> CInt {
-        return sqlite3_exec(_handle,"ROLLBACK TRANSACTION",nil,nil,nil)
-    }
-}
+//            dict[key] = value
+////            //如果出现重名则
+////            if i != columnNames.indexOfObject(key) {
+////                //取变量类型
+////                //let tableName = String.fromCString(sqlite3_column_table_name(stmt, index))
+////                //dict["\(tableName).\(key)"] = value
+////                dict["\(key).\(i)"] = value
+////            } else {
+////                dict[key] = value
+////            }
+//        }
+//
+//        return dict
+//    }
+//    open func getInt64(_ columnIndex:Int) -> Int64 {
+//        return sqlite3_column_int64(_stmt, CInt(columnIndex))
+//    }
+//    open func getUInt64(_ columnIndex:Int) -> UInt64 {
+//        return UInt64(bitPattern: getInt64(columnIndex))
+//    }
+//    open func getInt(_ columnIndex:Int) -> Int {
+//        return Int(truncatingIfNeeded: getInt64(columnIndex))
+//    }
+//    open func getUInt(_ columnIndex:Int) -> UInt {
+//        return UInt(truncatingIfNeeded: getInt64(columnIndex))
+//    }
+//    open func getInt8(_ columnIndex:Int) -> Int8 {
+//        return Int8(truncatingIfNeeded: getInt64(columnIndex))
+//    }
+//    open func getUInt8(_ columnIndex:Int) -> UInt8 {
+//        return UInt8(truncatingIfNeeded: getInt64(columnIndex))
+//    }
+//    open func getInt32(_ columnIndex:Int) -> Int32 {
+//        return Int32(truncatingIfNeeded: getInt64(columnIndex))
+//    }
+//    open func getUInt32(_ columnIndex:Int) -> UInt32 {
+//        return UInt32(truncatingIfNeeded: getInt64(columnIndex))
+//    }
+//    open func getBool(_ columnIndex:Int) -> Bool {
+//        return getInt64(columnIndex) != 0
+//    }
+//    open func getFloat(_ columnIndex:Int) -> Float {
+//        return Float(sqlite3_column_double(_stmt, CInt(columnIndex)))
+//    }
+//    open func getDouble(_ columnIndex:Int) -> Double {
+//        return sqlite3_column_double(_stmt, CInt(columnIndex))
+//    }
+//    open func getString(_ columnIndex:Int) -> String? {
+//        guard let result = sqlite3_column_text(_stmt, CInt(columnIndex)) else {
+//            return nil
+//        }
+//        return String(cString: result)
+//    }
+//
+//    open func getColumnIndex(_ columnName: String) -> Int {
+//        return _columns.firstIndex(where: { $0 == columnName.lowercased() }) ?? NSNotFound
+//    }
+//
+//    open var columnCount:Int { return _columns.count }
+//}
+//
+//open class DBRowSet<T:DBTableType>: DBRowSetBase {
+//    fileprivate override init(_ stmt: OpaquePointer,_ columns:[String]) {
+//        super.init(stmt, columns)
+//    }
+//
+//    public init <U>(_ rs:DBRowSet<U>) {
+//        super.init(rs._stmt!, rs._columns)
+//    }
+//
+//    open func getColumnIndex(_ column: T) -> Int {
+//        return _columns.firstIndex(where: { $0 == "\(column)".lowercased() }) ?? NSNotFound
+//    }
+//
+//
+//    open func getUInt(_ column: T) -> UInt {
+//        return UInt(truncatingIfNeeded: getInt64(column))
+//    }
+//    open func getBool(_ column: T) -> Bool {
+//        return getInt64(column) != 0
+//    }
+//    open func getInt(_ column: T) -> Int {
+//        return Int(truncatingIfNeeded: getInt64(column))
+//    }
+//    open func getInt64(_ column: T) -> Int64 {
+//        guard let index = _columns.firstIndex(where: { $0 == "\(column)".lowercased() }) else {
+//            return 0
+//        }
+//        return sqlite3_column_int64(_stmt, CInt(index))
+//    }
+//    open func getDouble(_ column: T) -> Double {
+//        guard let index = _columns.firstIndex(where: { $0 == "\(column)".lowercased() }) else {
+//            return 0
+//        }
+//        return sqlite3_column_double(_stmt, CInt(index))
+//    }
+//    open func getFloat(_ column: T) -> Float {
+//        return Float(getDouble(column))
+//    }
+//    open func getString(_ column: T) -> String! {
+//        guard let index = _columns.firstIndex(where: { $0 == "\(column)".lowercased() }) else {
+//            return nil
+//        }
+//        guard let data = sqlite3_column_text(_stmt, CInt(index)) else {
+//            return nil
+//        }
+//        return String(cString: data)
+//    }
+//    open func getData(_ column: T) -> Data! {
+//        guard let index = _columns.firstIndex(where: { $0 == "\(column)".lowercased() }) else {
+//            return nil
+//        }
+//        let data:UnsafeRawPointer = sqlite3_column_blob(_stmt, CInt(index))
+//        let size:CInt = sqlite3_column_bytes(_stmt, CInt(index))
+//        return Data(bytes: data, count: Int(size))
+//    }
+//    open func getDate(_ column: T) -> Date! {
+//        guard let index = _columns.firstIndex(where: { $0 == "\(column)".lowercased() }) else {
+//            return nil
+//        }
+//        let columnType = sqlite3_column_type(_stmt, CInt(index))
+//
+//        switch columnType {
+//        case SQLITE_INTEGER:
+//            fallthrough
+//        case SQLITE_FLOAT:
+//            let time = sqlite3_column_double(_stmt, CInt(index))
+//            return Date(timeIntervalSince1970: time)
+//        case SQLITE_TEXT:
+//            let date = String(cString: sqlite3_column_text(_stmt, CInt(index)))
+//            let formater = DateFormatter()
+//            formater.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//            //formater.calendar = NSCalendar.currentCalendar()
+//            return formater.date(from: date)
+//        default:
+//            return nil
+//        }
+//
+//    }
+//}
+//
+//
+//
+//
+//open class DBBindSet<T:DBTableType> {
+//
+//    fileprivate var _stmt:OpaquePointer
+//    fileprivate var _columns:[T]
+//    init(_ stmt: OpaquePointer,_ columns:[T]) {
+//        _stmt = stmt
+//        _columns = columns
+//    }
+//
+//    open var bindCount:CInt {
+//        return sqlite3_bind_parameter_count(_stmt)
+//    }
+//
+//    @discardableResult
+//    open func bindClear() -> CInt {
+//        return sqlite3_clear_bindings(_stmt)
+//    }
+//
+//    open func bindValue<U>(_ value:U?, column:T) throws {
+//        if let index = _columns.firstIndex(of: column) {
+//            if value == nil && column.option.contains(.NotNull) {
+//                print("\(column) 不能为Null, 可能导致绑定失败")
+//            }
+//            try bindValue(value, index: index + 1)
+//        } else {
+//            print("SQL中不存在 列:\(column)")
+//            throw DBError(domain: "SQL中不存在 列:\(column)", code: -1, userInfo: nil)
+//        }
+//    }
+//    // 泛型绑定
+//    open func bindValue<U>(_ columnValue:U?, index:Int) throws {
+//
+//        var flag:CInt = SQLITE_ROW
+//        if let v = columnValue {
+//            switch v {
+//            case _ as NSNull:
+//                flag = sqlite3_bind_null(_stmt,CInt(index))
+//            case _ as DataBaseNull:
+//                flag = sqlite3_bind_null(_stmt,CInt(index))
+//            case let value as String:
+//                let string:NSString = value as NSString
+//                flag = sqlite3_bind_text(_stmt,CInt(index),string.utf8String,-1,nil)
+//            case let value as Int:
+//                flag = sqlite3_bind_int64(_stmt,CInt(index),CLongLong(value))
+//            case let value as UInt:
+//                flag = sqlite3_bind_int64(_stmt,CInt(index),CLongLong(value))
+//            case let value as Int8:
+//                flag = sqlite3_bind_int(_stmt,CInt(index),CInt(value))
+//            case let value as UInt8:
+//                flag = sqlite3_bind_int(_stmt,CInt(index),CInt(value))
+//            case let value as Int16:
+//                flag = sqlite3_bind_int(_stmt,CInt(index),CInt(value))
+//            case let value as UInt16:
+//                flag = sqlite3_bind_int(_stmt,CInt(index),CInt(value))
+//            case let value as Int32:
+//                flag = sqlite3_bind_int(_stmt,CInt(index),CInt(value))
+//            case let value as UInt32:
+//                flag = sqlite3_bind_int64(_stmt,CInt(index),CLongLong(value))
+//            case let value as Int64:
+//                flag = sqlite3_bind_int64(_stmt,CInt(index),CLongLong(value))
+//            case let value as UInt64:
+//                flag = sqlite3_bind_int64(_stmt,CInt(index),CLongLong(value))
+//            case let value as Float:
+//                flag = sqlite3_bind_double(_stmt,CInt(index),CDouble(value))
+//            case let value as Double:
+//                flag = sqlite3_bind_double(_stmt,CInt(index),CDouble(value))
+//            case let value as Date:
+//                flag = sqlite3_bind_double(_stmt,CInt(index),CDouble(value.timeIntervalSince1970))
+//                //            case let value as Date:
+//            //                return sqlite3_bind_double(_stmt,CInt(index),CDouble(value.timeIntervalSince1970))
+//            case let value as Data:
+//                flag = sqlite3_bind_blob(_stmt,CInt(index),(value as NSData).bytes,-1,nil)
+//            default:
+//                let mirror = Mirror(reflecting: v)
+//                if mirror.displayStyle == .optional {
+//                    let children = mirror.children
+//                    if children.count == 0 {
+//                        flag = sqlite3_bind_null(_stmt,CInt(index))
+//                    } else {
+//                        try bindValue(children[children.startIndex].value, index: index)
+//                    }
+//                } else {
+//                    let string:NSString = "\(v)" as NSString
+//                    flag = sqlite3_bind_text(_stmt,CInt(index),string.utf8String,-1,nil)
+//                }
+//            }
+//        } else {
+//            flag = sqlite3_bind_null(_stmt,CInt(index))
+//        }
+//        if flag != SQLITE_OK && flag != SQLITE_ROW {
+//            throw DBError(domain: "批量插入失败", code: Int(flag), userInfo: nil)
+//        }
+//    }
+//}
+//
+//// MARK: - 数据库操作句柄
+//open class DBHandle {
+//    fileprivate var _handle:OpaquePointer?
+//    internal init (_ handle:OpaquePointer!) { _handle = handle }
+//
+//    deinit { if _handle != nil { sqlite3_close(_handle) } }
+//
+//    var version:Int {
+//        get {
+//            var stmt:OpaquePointer? = nil
+//            if SQLITE_OK == sqlite3_prepare_v2(_handle, "PRAGMA user_version", -1, &stmt, nil) {
+//                defer { sqlite3_finalize(stmt) }
+//                return SQLITE_ROW == sqlite3_step(stmt) ? Int(sqlite3_column_int(stmt, 0)) : 0
+//            }
+//            return -1
+//        }
+//        set { sqlite3_exec(_handle, "PRAGMA user_version = \(newValue)", nil, nil, nil) }
+//    }
+//
+//    open var lastError:DBError {
+//        let errorCode = sqlite3_errcode(_handle)
+//        let errorDescription = String(cString: sqlite3_errmsg(_handle))
+//        return DBError(domain: errorDescription, code: Int(errorCode), userInfo: nil)
+//    }
+//    fileprivate var _lastSQL:String? //{ didSet { print(_lastSQL ?? "") } }
+//    open var lastSQL:String { return _lastSQL ?? "" }
+//
+//    // MARK: 执行SQL
+//    open func exec(_ sql:String) throws {
+//        _lastSQL = sql
+//        let flag = sqlite3_exec(_handle, sql, nil, nil, nil)
+//        if flag != SQLITE_OK { throw lastError }
+//    }
+//    open func exec(_ sql:SQLBase) throws {
+//        try exec(sql.description)
+//    }
+//
+//    fileprivate func query(_ sql:String) throws -> OpaquePointer {
+//        var stmt:OpaquePointer? = nil
+//        _lastSQL = sql
+//        if SQLITE_OK != sqlite3_prepare_v2(_handle, sql, -1, &stmt, nil) {
+//            sqlite3_finalize(stmt)
+//            throw lastError
+//        }
+//        return stmt! //DBRowSet(stmt)
+//    }
+//
+//    open var lastErrorMessage:String {
+//        return String(cString: sqlite3_errmsg(_handle))
+//    }
+//    open var lastInsertRowID:Int64 {
+//        return sqlite3_last_insert_rowid(_handle)
+//    }
+//
+//
+//}
+//
+//// MARK: - base execute sql function
+//extension DBHandle {
+//    // 单表查询
+//    public func query<T>(_ sql:SQL<T>) throws -> DBResultSet<T> {
+//        return DBResultSet<T>(try query(sql.description))
+//    }
+//
+//    // 双表查询
+//    public func query<T1, T2>(_ sql:SQL2<T1, T2>) throws -> DBResultSet<T1> {
+//        return DBResultSet<T1>(try query(sql.description))
+//    }
+//
+//    // 清空表
+//    public func truncateTable<T:DBTableType>(_:T.Type) throws {
+//        try exec(DELETE.FROM(T.self))
+//        try exec(UPDATE(SQLiteSequence.self).SET[.seq == 0].WHERE(.name == T.table_name))
+//    }
+//
+//    // 创建表
+//    public func createTable<T:DBTableType>(_:T.Type) throws {
+//        try  createTable(T.self, otherSQL:"")
+//    }
+//    public func createTableIfNotExists<T:DBTableType>(_:T.Type) {
+//        try! createTable(T.self, otherSQL:" IF NOT EXISTS")
+//    }
+//    fileprivate func createTable<T:DBTableType>(_:T.Type, otherSQL:String) throws {
+//        var columns:[T] = []
+//        var primaryKeys:[T] = []
+//        for column in T.allCases where !column.option.contains(.DeletedKey) {
+//            if column.option.contains(.PrimaryKey) {
+//                primaryKeys.append(column)
+//            }
+//            columns.append(column)
+//        }
+//
+//        var params:String = columns.map({
+//            if let value = $0.defaultValue?.description {
+//                return "\($0) \($0.type)\($0.option.descriptionBy(primaryKeys.count > 1)) DEFAULT \(value)"
+//            }
+//            return "\($0) \($0.type)\($0.option.descriptionBy(primaryKeys.count > 1))"
+//        }).joined(separator: ", ")
+//
+//
+//        if primaryKeys.count > 1 {
+//            let keys = primaryKeys.map({ "\($0)" }).joined(separator: ", ")
+//            params.append(", PRIMARY KEY (\(keys))")
+//        }
+//
+//        try exec("CREATE TABLE\(otherSQL) \(T.table_name) (\(params))")
+//    }
+//}
+//
+//// MARK: - transaction 事务
+//extension DBHandle {
+//    // MARK: 开启事务 BEGIN TRANSACTION
+//    @discardableResult
+//    func beginTransaction() -> CInt {
+//        return sqlite3_exec(_handle,"BEGIN TRANSACTION",nil,nil,nil)
+//    }
+//    // MARK: 提交事务 COMMIT TRANSACTION
+//    @discardableResult
+//    func commitTransaction() -> CInt {
+//        return sqlite3_exec(_handle,"COMMIT TRANSACTION",nil,nil,nil)
+//    }
+//    // MARK: 回滚事务 ROLLBACK TRANSACTION
+//    @discardableResult
+//    func rollbackTransaction() -> CInt {
+//        return sqlite3_exec(_handle,"ROLLBACK TRANSACTION",nil,nil,nil)
+//    }
+//}
 
 // MARK: - 空与非空对象
 public protocol DBNullType: CustomStringConvertible {}
@@ -595,6 +558,7 @@ open class DBSQLHandle {
         sql.append(condition)
     }
 }
+
 private protocol DBSQLHandleType {
     var _handle:DBSQLHandle { get set }
     init(_ handle:DBSQLHandle?)
@@ -1222,74 +1186,91 @@ open class SQLInsert<T:DBTableType>: DBSQLHandleType {
         _handle.sql.append("VALUES(\(text))")
         return SQL<T>(_handle)
     }
-    open func VALUES<U>(_ values:[U], into db:DBHandle, binds:(_ id:Int64, _ value:U, _ bindSet:DBBindSet<T>) throws -> () ) throws {
-        if values.count == 0 {  return  }
-        // 如果列字段为 * 则 遍历此表所有列
-        if columns.isEmpty {
-            for column in T.allCases where !column.option.contains(.DeletedKey)  {
-                columns.append(column)
-            }
-        }
-        let texts = [String](repeating: "?", count: columns.count).joined(separator: ", ")
-        _handle.sql.append("VALUES(\(texts))")
-        // TODO: 批量插入
-        //print(_handle.sql.joinWithSeparator(" "))
-        let stmt = try db.query(_handle.sql.joined(separator: " "))
-        //print(db.lastSQL)
-        // 方法完成后释放 数据操作句柄
-        //defer { sqlite3_finalize(stmt);print("释放插入句柄") }
-        let bindSet = DBBindSet<T>(stmt, columns)
-        
-        // 获取最后一次插入的ID
-        db.beginTransaction()
-        var flag:CInt = SQLITE_ERROR
-        for i:Int in 0 ..< columns.count {
-            let columnOption = columns[i].option
-            let value:Int? = columnOption.contains(.NotNull) ? 1 : nil
-            if !columnOption.contains(.PrimaryKey) {
-                try bindSet.bindValue(value, index: i + 1)
-            } else if !columnOption.contains(.Autoincrement) {
-                try bindSet.bindValue(1, index: i + 1)
-            }
-        }
-        flag = sqlite3_step(stmt)
-        var lastInsertID = max(db.lastInsertRowID, 1)       //sqlite3_last_insert_rowid(db._handle)
-        db.rollbackTransaction()
-        if flag == SQLITE_CONSTRAINT {
-            // 不符合字段约束
-            throw NSError(domain: "Abort due to constraint violation", code: Int(flag), userInfo: ["sql":_handle.sql.joined(separator: " ")])
-        }
-        sqlite3_reset(stmt)
-        db.beginTransaction()
-        
-        // 插入数据
-        for value in values {
-            // 推测本条数据插入ID为最后一条插入数据的ID + 1
-            try binds(lastInsertID, value, bindSet)
-            flag = sqlite3_step(stmt)
-            if flag != SQLITE_OK && flag != SQLITE_DONE {
-                #if DEBUG
-//                    fatalError("无法绑定数据[\(dict)] 到[\(columnFields)]")
-                #endif
-                bindSet.bindClear()     //如果失败则绑定下一组
-            } else {
-                sqlite3_reset(stmt)
-                if lastInsertID == db.lastInsertRowID {
-                    lastInsertID += 1
-                }
-            }
-        }
-        sqlite3_finalize(stmt)
-        if flag == SQLITE_OK || flag == SQLITE_DONE {
-            flag = SQLITE_OK
-            db.commitTransaction()
-        } else {
-            db.rollbackTransaction()
-            let errorDescription = db.lastErrorMessage
-            print(db.lastSQL)
-            throw DBError(domain: errorDescription, code: Int(flag), userInfo: nil)
-        }
-    }
+//    open func VALUES<U, BindSet>(_ values:[U], into db:DBHandle, binds:(_ id:Int64, _ value:U, _ bindSet:BindSet) throws -> () ) throws where BindSet : DBBindSet {
+//        if values.count == 0 {  return  }
+//        // 如果列字段为 * 则 遍历此表所有列
+//        if columns.isEmpty {
+//            for column in T.allCases where !column.option.contains(.DeletedKey)  {
+//                columns.append(column)
+//            }
+//        }
+//        let texts = [String](repeating: "?", count: columns.count).joined(separator: ", ")
+//        _handle.sql.append("VALUES(\(texts))")
+//        // TODO: 批量插入
+//        //print(_handle.sql.joinWithSeparator(" "))
+//        let stmt = try db.query(_handle.sql.joined(separator: " "))
+//        //print(db.lastSQL)
+//        // 方法完成后释放 数据操作句柄
+//        //defer { sqlite3_finalize(stmt);print("释放插入句柄") }
+//        let bindSet = DBBindSet<T>(stmt, columns)
+//        
+//        db.beginTransaction { (transaction) in
+//            var flag:CInt = SQLITE_ERROR
+//            for i:Int in 0 ..< columns.count {
+//                let columnOption = columns[i].option
+//                let value:Int? = columnOption.contains(.NotNull) ? 1 : nil
+//                if !columnOption.contains(.PrimaryKey) {
+//                    try bindSet.bindValue(value, index: i + 1)
+//                } else if !columnOption.contains(.Autoincrement) {
+//                    try bindSet.bindValue(1, index: i + 1)
+//                }
+//            }
+//            flag = sqlite3_step(stmt)
+//            var lastInsertID = max(db.lastInsertRowID, 1)       //sqlite3_last_insert_rowid(db._handle)
+//            try? transaction.rollback()
+//        }
+//        // 获取最后一次插入的ID
+//        db.beginTransaction()
+//        var flag:CInt = SQLITE_ERROR
+//        for i:Int in 0 ..< columns.count {
+//            let columnOption = columns[i].option
+//            let value:Int? = columnOption.contains(.NotNull) ? 1 : nil
+//            if !columnOption.contains(.PrimaryKey) {
+//                try bindSet.bindValue(value, index: i + 1)
+//            } else if !columnOption.contains(.Autoincrement) {
+//                try bindSet.bindValue(1, index: i + 1)
+//            }
+//        }
+//        flag = sqlite3_step(stmt)
+//        var lastInsertID = max(db.lastInsertRowID, 1)       //sqlite3_last_insert_rowid(db._handle)
+//        db.rollbackTransaction()
+//        if flag == SQLITE_CONSTRAINT {
+//            // 不符合字段约束
+//            throw NSError(domain: "Abort due to constraint violation", code: Int(flag), userInfo: ["sql":_handle.sql.joined(separator: " ")])
+//        }
+//        sqlite3_reset(stmt)
+//        
+//        
+//        db.beginTransaction()
+//        
+//        // 插入数据
+//        for value in values {
+//            // 推测本条数据插入ID为最后一条插入数据的ID + 1
+//            try binds(lastInsertID, value, bindSet)
+//            flag = sqlite3_step(stmt)
+//            if flag != SQLITE_OK && flag != SQLITE_DONE {
+//                #if DEBUG
+////                    fatalError("无法绑定数据[\(dict)] 到[\(columnFields)]")
+//                #endif
+//                bindSet.bindClear()     //如果失败则绑定下一组
+//            } else {
+//                sqlite3_reset(stmt)
+//                if lastInsertID == db.lastInsertRowID {
+//                    lastInsertID += 1
+//                }
+//            }
+//        }
+//        sqlite3_finalize(stmt)
+//        if flag == SQLITE_OK || flag == SQLITE_DONE {
+//            flag = SQLITE_OK
+//            db.commitTransaction()
+//        } else {
+//            db.rollbackTransaction()
+//            let errorDescription = db.lastErrorMessage
+//            print(db.lastSQL)
+//            throw DBError(code: Int(flag), errorDescription)
+//        }
+//    }
 }
 
 open class SQL2<T1:DBTableType,T2:DBTableType>:SQL<T1> {

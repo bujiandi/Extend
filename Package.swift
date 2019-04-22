@@ -115,7 +115,10 @@ let package = Package(
             ]),
         .target(
             name: "XML",
-            dependencies: []),
+            dependencies: [],
+            swiftSettings: [
+                .define("DEBUG", .when(configuration: .debug)),
+            ]),
         .target(
             name: "MD5",
             dependencies: []),
