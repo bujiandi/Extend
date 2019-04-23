@@ -7,10 +7,11 @@
 //
 
 import SQLite3
+import DataBase
 import Foundation
 
 
-open class DBError : NSError {}
+//open class DBError : NSError {}
 
 
 // MARK: - SQLite
@@ -50,7 +51,7 @@ open class SQLite {
         if result != SQLITE_OK {
             let errorDescription = String(cString: sqlite3_errmsg(handle)) 
             sqlite3_close(handle)
-            throw DBError(domain: errorDescription, code: Int(result), userInfo: nil)
+            throw DBError(code: Int(result), errorDescription)
         }
         let db = Handle(handle)
         let oldVersion = db.version

@@ -140,11 +140,14 @@ let package = Package(
         .target(
             name: "DataBase",
             dependencies: []),
+        .testTarget(
+            name: "DataBaseTests",
+            dependencies: ["DataBase"]),
         .target(
             name: "SQLite",
             dependencies: ["DataBase"],
             linkerSettings: [
-                .linkedLibrary("libsqlite3.tdb"),
+                .linkedLibrary("sqlite3"),
                 .linkedFramework("QuartzCore")
             ]),
         .target(

@@ -7,18 +7,20 @@
 //
 
 import SQLite3
+import DataBase
 import Foundation
 
 
 extension SQLite {
     
-    open class Handle {
-        fileprivate var _handle:OpaquePointer?
+    open class Handle: DBHandle {
+        
+        internal var _handle:OpaquePointer?
         internal init (_ handle:OpaquePointer!) { _handle = handle }
         
         deinit { if _handle != nil { sqlite3_close(_handle) } }
         
-        var version:Int {
+        public var version:Int {
             get {
                 var stmt:OpaquePointer? = nil
                 if SQLITE_OK == sqlite3_prepare_v2(_handle, "PRAGMA user_version", -1, &stmt, nil) {
@@ -33,7 +35,7 @@ extension SQLite {
         open var lastError:DBError {
             let errorCode = sqlite3_errcode(_handle)
             let errorDescription = String(cString: sqlite3_errmsg(_handle))
-            return DBError(domain: errorDescription, code: Int(errorCode), userInfo: nil)
+            return DBError(code: Int(errorCode), errorDescription)
         }
         
         fileprivate var _lastSQL:String? //{ didSet { print(_lastSQL ?? "") } }
@@ -49,7 +51,7 @@ extension SQLite {
             try exec(sql.description)
         }
         
-        fileprivate func query(_ sql:String) throws -> OpaquePointer {
+        public func query(_ sql:String) throws -> OpaquePointer {
             var stmt:OpaquePointer? = nil
             _lastSQL = sql
             if SQLITE_OK != sqlite3_prepare_v2(_handle, sql, -1, &stmt, nil) {
@@ -66,22 +68,23 @@ extension SQLite {
             return sqlite3_last_insert_rowid(_handle)
         }
         
-        public func transaction(_ operate: () -> TransactionResult) {
-            // 开启事务
-            sqlite3_exec(_handle,"BEGIN TRANSACTION",nil,nil,nil)
-            
-            // 执行事务内容
-            let result = operate()
-            
-            // 执行事务结果
-            switch result {
-            case .rollback: // 回滚
-                sqlite3_exec(_handle,"ROLLBACK TRANSACTION",nil,nil,nil)
-            case .commit:   // 提交
-                sqlite3_exec(_handle,"COMMIT TRANSACTION",nil,nil,nil)
-            }
-            
-        }
+
+//        public func transaction(_ operate: () -> TransactionResult) {
+//            // 开启事务
+//            sqlite3_exec(_handle,"BEGIN TRANSACTION",nil,nil,nil)
+//            
+//            // 执行事务内容
+//            let result = operate()
+//            
+//            // 执行事务结果
+//            switch result {
+//            case .rollback: // 回滚
+//                sqlite3_exec(_handle,"ROLLBACK TRANSACTION",nil,nil,nil)
+//            case .commit:   // 提交
+//                sqlite3_exec(_handle,"COMMIT TRANSACTION",nil,nil,nil)
+//            }
+//            
+//        }
 
     }
 
@@ -89,11 +92,11 @@ extension SQLite {
 }
 
 extension SQLite {
-    
-    public enum TransactionResult {
-        case commit
-        case rollback
-    }
+//    
+//    public enum TransactionResult {
+//        case commit
+//        case rollback
+//    }
     
 }
 

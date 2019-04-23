@@ -7,12 +7,15 @@
 //
 
 import SQLite3
+import DataBase
 import Foundation
 
 
 extension SQLite {
     
-    open class BindSet<T:DBTableType> {
+    open class BindSet<T:DBTableType>: DBBindSet {
+        
+        public typealias Table = T
         
         fileprivate var _stmt:OpaquePointer
         fileprivate var _columns:[T]
@@ -38,7 +41,8 @@ extension SQLite {
                 try bindValue(value, index: index + 1)
             } else {
                 print("SQL中不存在 列:\(column)")
-                throw DBError(domain: "SQL中不存在 列:\(column)", code: -1, userInfo: nil)
+//                throw DBError(domain: "SQL中不存在 列:\(column)", code: -1, userInfo: nil)
+                throw DBError(code: -1, "SQL中不存在 列:\(column)")
             }
         }
         // 泛型绑定
@@ -102,7 +106,7 @@ extension SQLite {
                 flag = sqlite3_bind_null(_stmt,CInt(index))
             }
             if flag != SQLITE_OK && flag != SQLITE_ROW {
-                throw DBError(domain: "批量插入失败", code: Int(flag), userInfo: nil)
+                throw DBError(code: Int(flag), "批量插入失败") //DBError(domain: "批量插入失败", code: Int(flag), userInfo: nil)
             }
         }
     }

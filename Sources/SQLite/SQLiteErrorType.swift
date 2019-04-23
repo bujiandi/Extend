@@ -6,6 +6,7 @@
 //  Copyright © 2016 yFenFen. All rights reserved.
 //
 
+import DataBase
 import Foundation
 
 public enum SQLiteErrorType : Int, CustomStringConvertible, CustomDebugStringConvertible, Error {

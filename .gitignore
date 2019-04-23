@@ -5,3 +5,5 @@ xcschememanagement.plist
 WorkspaceSettings.xcsettings
 *.xcworkspacedata
 IDEWorkspaceChecks.plist
+/.build
+*.xcbkptlist

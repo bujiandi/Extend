@@ -23,7 +23,7 @@ public protocol DBHandle {
     var lastErrorMessage:String { get }
     var lastInsertRowID:Int64 { get }
 
-    func beginTransaction(_ block:(DBTransaction) -> Void)
+    func beginTransaction(_ block:(DBTransaction) throws -> Void) rethrows
 }
 
 
@@ -38,12 +38,6 @@ extension DBHandle {
 //    public func query<T1, T2>(_ sql:SQL2<T1, T2>) throws -> DBResultSet<T1> {
 //        return DBResultSet<T1>(try query(sql.description))
 //    }
-    
-    // 清空表
-    public func truncateTable<T:DBTableType>(_:T.Type) throws {
-        try exec(DELETE.FROM(T.self))
-        try exec(UPDATE(SQLiteSequence.self).SET[.seq == 0].WHERE(.name == T.table_name))
-    }
     
     // 创建表
     public func createTable<T:DBTableType>(_:T.Type) throws {
@@ -84,7 +78,7 @@ extension DBHandle {
     // MARK: 开启事务 BEGIN TRANSACTION
 //    @discardableResult
 //    func beginTransaction() -> CInt {
-//        return sqlite3_exec(_handle,"BEGIN TRANSACTION",nil,nil,nil)
+//        return sqlite3_exec(handle,"BEGIN TRANSACTION",nil,nil,nil)
 //    }
 //    // MARK: 提交事务 COMMIT TRANSACTION
 //    @discardableResult

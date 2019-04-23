@@ -7,20 +7,24 @@
 
 //import Foundation
 
+
 // MARK: - protocols 接口(创建数据表需用枚举实现以下接口)
 /// 注: enum OneTable: String, DBTableType
 public protocol DBTableType: RawRepresentable, CaseIterable, Hashable {
+    
+    associatedtype ColumnType : DBColumnTypeProtocol
+//    associatedtype ColumnOptions : DBColumnOptionsProtocol
+    
     static var table_name:String { get }
     
-    var type: DataBaseColumnType { get }
-    var option: DataBaseColumnOptions { get }
-    
-    // optional
+    var type: ColumnType { get }
+    var option: DBColumnOptions { get }
     var defaultValue:CustomStringConvertible? { get }
 }
 
 // MARK: - 遍历枚举
 extension DBTableType {
+    
     public var defaultValue:CustomStringConvertible? { return nil }
     
     fileprivate static func enumerateEnum<T: Hashable>(_: T.Type) -> AnyIterator<T> {
