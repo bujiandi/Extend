@@ -8,11 +8,10 @@
 
 import SQLite3
 import DataBase
-//import Foundation
 
 extension SQLite {
     
-    open class ResultSet<T:DBTableType>: IteratorProtocol, Sequence {
+    open class ResultSet<T:DBTableType>: IteratorProtocol, Swift.Sequence {
         public typealias Element = RowSet<T>
         
         internal var _stmt:OpaquePointer? = nil

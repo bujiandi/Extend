@@ -89,7 +89,7 @@
          );
          dependencies = (
             "OBJ_280",
-            "OBJ_281"
+            "OBJ_282"
          );
          name = "ExtendPackageTests";
          productName = "ExtendPackageTests";
@@ -886,24 +886,24 @@
       "OBJ_168" = {
          isa = "PBXGroup";
          children = (
-            "Extend::Operator::Product",
-            "Extend::RichText::Product",
-            "Extend::DataBase::Product",
-            "Extend::DataBaseTests::Product",
-            "Extend::SocketClient::Product",
-            "Extend::JSON::Product",
-            "Extend::MD5::Product",
-            "Extend::HTTPClient::Product",
             "Extend::HTTPServer::Product",
-            "Extend::SocketServer::Product",
-            "Extend::CoreAnimations::Product",
-            "Extend::XML::Product",
-            "Extend::SQLite::Product",
+            "Extend::MD5::Product",
             "Extend::MySQL::Product",
-            "Extend::Extend::Product",
-            "Extend::Protocolar::Product",
+            "Extend::Operator::Product",
+            "Extend::ExtendTests::Product",
+            "Extend::SocketClient::Product",
+            "Extend::DataBase::Product",
             "Extend::HTTP::Product",
-            "Extend::ExtendTests::Product"
+            "Extend::JSON::Product",
+            "Extend::Extend::Product",
+            "Extend::CoreAnimations::Product",
+            "Extend::DataBaseTests::Product",
+            "Extend::HTTPClient::Product",
+            "Extend::SQLite::Product",
+            "Extend::XML::Product",
+            "Extend::Protocolar::Product",
+            "Extend::SocketServer::Product",
+            "Extend::RichText::Product"
          );
          name = "Products";
          path = "";
@@ -1760,11 +1760,11 @@
       };
       "OBJ_280" = {
          isa = "PBXTargetDependency";
-         target = "Extend::DataBaseTests";
-      };
-      "OBJ_281" = {
-         isa = "PBXTargetDependency";
          target = "Extend::ExtendTests";
+      };
+      "OBJ_282" = {
+         isa = "PBXTargetDependency";
+         target = "Extend::DataBaseTests";
       };
       "OBJ_283" = {
          isa = "XCConfigurationList";
@@ -3406,9 +3406,7 @@
             );
             OTHER_LDFLAGS = (
                "$(inherited)",
-               "-lsqlite3",
-               "-framework",
-               "QuartzCore"
+               "-lsqlite3"
             );
             OTHER_SWIFT_FLAGS = (
                "$(inherited)"
@@ -3455,9 +3453,7 @@
             );
             OTHER_LDFLAGS = (
                "$(inherited)",
-               "-lsqlite3",
-               "-framework",
-               "QuartzCore"
+               "-lsqlite3"
             );
             OTHER_SWIFT_FLAGS = (
                "$(inherited)"

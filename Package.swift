@@ -10,7 +10,6 @@ let package = Package(
         .iOS(.v8),
         .watchOS(.v2),
         .tvOS(.v9),
-//        .linux(.)
     ],
     products: [
         // Custom protocols
@@ -148,7 +147,6 @@ let package = Package(
             dependencies: ["DataBase"],
             linkerSettings: [
                 .linkedLibrary("sqlite3"),
-                .linkedFramework("QuartzCore")
             ]),
         .target(
             name: "MySQL",

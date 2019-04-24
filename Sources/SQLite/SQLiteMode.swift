@@ -7,7 +7,6 @@
 //
 
 import SQLite3
-import Foundation
 
 
 extension SQLite {

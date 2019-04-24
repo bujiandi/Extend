@@ -10,7 +10,7 @@ import SQLite3
 import DataBase
 import Foundation
 
-
+@_exported import DataBase
 //open class DBError : NSError {}
 
 

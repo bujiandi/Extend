@@ -11,6 +11,7 @@ import Foundation
 
 
 extension SQLite {
+    
     struct UnkeyedContainer : UnkeyedDecodingContainer {
         
         internal let _stmt:OpaquePointer?

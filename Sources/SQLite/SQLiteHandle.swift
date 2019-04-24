@@ -115,7 +115,7 @@ extension SQLite.Handle {
     // 清空表
     public func truncateTable<T:DBTableType>(_:T.Type) throws {
         try exec(DELETE.FROM(T.self))
-        try exec(UPDATE(SQLiteSequence.self).SET[.seq == 0].WHERE(.name == T.table_name))
+        try exec(UPDATE(SQLite.Sequence.self).SET[.seq == 0].WHERE(.name == T.table_name))
     }
     
     // 创建表
