@@ -89,7 +89,7 @@
          );
          dependencies = (
             "OBJ_280",
-            "OBJ_282"
+            "OBJ_281"
          );
          name = "ExtendPackageTests";
          productName = "ExtendPackageTests";
@@ -124,10 +124,11 @@
             "OBJ_321"
          );
          dependencies = (
-            "OBJ_326",
             "OBJ_327",
-            "OBJ_328",
-            "OBJ_329"
+            "OBJ_329",
+            "OBJ_330",
+            "OBJ_331",
+            "OBJ_332"
          );
          name = "HTTP";
          productName = "HTTP";
@@ -141,10 +142,10 @@
       };
       "Extend::HTTPClient" = {
          isa = "PBXNativeTarget";
-         buildConfigurationList = "OBJ_332";
+         buildConfigurationList = "OBJ_335";
          buildPhases = (
-            "OBJ_335",
-            "OBJ_337"
+            "OBJ_338",
+            "OBJ_340"
          );
          dependencies = (
          );
@@ -160,10 +161,10 @@
       };
       "Extend::HTTPServer" = {
          isa = "PBXNativeTarget";
-         buildConfigurationList = "OBJ_339";
+         buildConfigurationList = "OBJ_342";
          buildPhases = (
-            "OBJ_342",
-            "OBJ_344"
+            "OBJ_345",
+            "OBJ_347"
          );
          dependencies = (
          );
@@ -179,10 +180,10 @@
       };
       "Extend::JSON" = {
          isa = "PBXNativeTarget";
-         buildConfigurationList = "OBJ_346";
+         buildConfigurationList = "OBJ_348";
          buildPhases = (
-            "OBJ_349",
-            "OBJ_369"
+            "OBJ_351",
+            "OBJ_371"
          );
          dependencies = (
          );
@@ -198,10 +199,10 @@
       };
       "Extend::MD5" = {
          isa = "PBXNativeTarget";
-         buildConfigurationList = "OBJ_370";
+         buildConfigurationList = "OBJ_372";
          buildPhases = (
-            "OBJ_373",
-            "OBJ_379"
+            "OBJ_375",
+            "OBJ_381"
          );
          dependencies = (
          );
@@ -217,13 +218,13 @@
       };
       "Extend::MySQL" = {
          isa = "PBXNativeTarget";
-         buildConfigurationList = "OBJ_381";
+         buildConfigurationList = "OBJ_383";
          buildPhases = (
-            "OBJ_384",
-            "OBJ_386"
+            "OBJ_386",
+            "OBJ_388"
          );
          dependencies = (
-            "OBJ_388"
+            "OBJ_390"
          );
          name = "MySQL";
          productName = "MySQL";
@@ -237,13 +238,13 @@
       };
       "Extend::Operator" = {
          isa = "PBXNativeTarget";
-         buildConfigurationList = "OBJ_389";
+         buildConfigurationList = "OBJ_391";
          buildPhases = (
-            "OBJ_392",
-            "OBJ_398"
+            "OBJ_394",
+            "OBJ_400"
          );
          dependencies = (
-            "OBJ_400"
+            "OBJ_402"
          );
          name = "Operator";
          productName = "Operator";
@@ -257,10 +258,10 @@
       };
       "Extend::Protocolar" = {
          isa = "PBXNativeTarget";
-         buildConfigurationList = "OBJ_401";
+         buildConfigurationList = "OBJ_403";
          buildPhases = (
-            "OBJ_404",
-            "OBJ_415"
+            "OBJ_406",
+            "OBJ_417"
          );
          dependencies = (
          );
@@ -276,10 +277,10 @@
       };
       "Extend::RichText" = {
          isa = "PBXNativeTarget";
-         buildConfigurationList = "OBJ_417";
+         buildConfigurationList = "OBJ_419";
          buildPhases = (
-            "OBJ_420",
-            "OBJ_426"
+            "OBJ_422",
+            "OBJ_428"
          );
          dependencies = (
          );
@@ -295,13 +296,13 @@
       };
       "Extend::SQLite" = {
          isa = "PBXNativeTarget";
-         buildConfigurationList = "OBJ_428";
+         buildConfigurationList = "OBJ_430";
          buildPhases = (
-            "OBJ_431",
-            "OBJ_448"
+            "OBJ_433",
+            "OBJ_450"
          );
          dependencies = (
-            "OBJ_450"
+            "OBJ_452"
          );
          name = "SQLite";
          productName = "SQLite";
@@ -315,10 +316,10 @@
       };
       "Extend::SocketClient" = {
          isa = "PBXNativeTarget";
-         buildConfigurationList = "OBJ_452";
+         buildConfigurationList = "OBJ_454";
          buildPhases = (
-            "OBJ_455",
-            "OBJ_457"
+            "OBJ_457",
+            "OBJ_459"
          );
          dependencies = (
          );
@@ -334,10 +335,10 @@
       };
       "Extend::SocketServer" = {
          isa = "PBXNativeTarget";
-         buildConfigurationList = "OBJ_459";
+         buildConfigurationList = "OBJ_461";
          buildPhases = (
-            "OBJ_462",
-            "OBJ_464"
+            "OBJ_464",
+            "OBJ_466"
          );
          dependencies = (
          );
@@ -365,10 +366,10 @@
       };
       "Extend::XML" = {
          isa = "PBXNativeTarget";
-         buildConfigurationList = "OBJ_466";
+         buildConfigurationList = "OBJ_468";
          buildPhases = (
-            "OBJ_469",
-            "OBJ_471"
+            "OBJ_471",
+            "OBJ_473"
          );
          dependencies = (
          );
@@ -886,24 +887,24 @@
       "OBJ_168" = {
          isa = "PBXGroup";
          children = (
-            "Extend::HTTPServer::Product",
+            "Extend::SQLite::Product",
+            "Extend::CoreAnimations::Product",
+            "Extend::HTTP::Product",
+            "Extend::DataBase::Product",
+            "Extend::Protocolar::Product",
+            "Extend::XML::Product",
+            "Extend::ExtendTests::Product",
+            "Extend::RichText::Product",
+            "Extend::Extend::Product",
+            "Extend::DataBaseTests::Product",
             "Extend::MD5::Product",
             "Extend::MySQL::Product",
-            "Extend::Operator::Product",
-            "Extend::ExtendTests::Product",
             "Extend::SocketClient::Product",
-            "Extend::DataBase::Product",
-            "Extend::HTTP::Product",
-            "Extend::JSON::Product",
-            "Extend::Extend::Product",
-            "Extend::CoreAnimations::Product",
-            "Extend::DataBaseTests::Product",
-            "Extend::HTTPClient::Product",
-            "Extend::SQLite::Product",
-            "Extend::XML::Product",
-            "Extend::Protocolar::Product",
             "Extend::SocketServer::Product",
-            "Extend::RichText::Product"
+            "Extend::Operator::Product",
+            "Extend::HTTPServer::Product",
+            "Extend::JSON::Product",
+            "Extend::HTTPClient::Product"
          );
          name = "Products";
          path = "";
@@ -1760,11 +1761,11 @@
       };
       "OBJ_280" = {
          isa = "PBXTargetDependency";
-         target = "Extend::ExtendTests";
-      };
-      "OBJ_282" = {
-         isa = "PBXTargetDependency";
          target = "Extend::DataBaseTests";
+      };
+      "OBJ_281" = {
+         isa = "PBXTargetDependency";
+         target = "Extend::ExtendTests";
       };
       "OBJ_283" = {
          isa = "XCConfigurationList";
@@ -2163,40 +2164,37 @@
             "OBJ_322",
             "OBJ_323",
             "OBJ_324",
-            "OBJ_325"
+            "OBJ_325",
+            "OBJ_326"
          );
       };
       "OBJ_322" = {
          isa = "PBXBuildFile";
-         fileRef = "Extend::Extend::Product";
+         fileRef = "Extend::JSON::Product";
       };
       "OBJ_323" = {
          isa = "PBXBuildFile";
-         fileRef = "Extend::Operator::Product";
+         fileRef = "Extend::Extend::Product";
       };
       "OBJ_324" = {
          isa = "PBXBuildFile";
-         fileRef = "Extend::Protocolar::Product";
+         fileRef = "Extend::Operator::Product";
       };
       "OBJ_325" = {
          isa = "PBXBuildFile";
-         fileRef = "Extend::MD5::Product";
+         fileRef = "Extend::Protocolar::Product";
       };
       "OBJ_326" = {
-         isa = "PBXTargetDependency";
-         target = "Extend::Extend";
+         isa = "PBXBuildFile";
+         fileRef = "Extend::MD5::Product";
       };
       "OBJ_327" = {
          isa = "PBXTargetDependency";
-         target = "Extend::Operator";
-      };
-      "OBJ_328" = {
-         isa = "PBXTargetDependency";
-         target = "Extend::Protocolar";
+         target = "Extend::JSON";
       };
       "OBJ_329" = {
          isa = "PBXTargetDependency";
-         target = "Extend::MD5";
+         target = "Extend::Extend";
       };
       "OBJ_33" = {
          isa = "PBXGroup";
@@ -2231,16 +2229,28 @@
          path = "Sources/Extend";
          sourceTree = "SOURCE_ROOT";
       };
+      "OBJ_330" = {
+         isa = "PBXTargetDependency";
+         target = "Extend::Operator";
+      };
+      "OBJ_331" = {
+         isa = "PBXTargetDependency";
+         target = "Extend::Protocolar";
+      };
       "OBJ_332" = {
+         isa = "PBXTargetDependency";
+         target = "Extend::MD5";
+      };
+      "OBJ_335" = {
          isa = "XCConfigurationList";
          buildConfigurations = (
-            "OBJ_333",
-            "OBJ_334"
+            "OBJ_336",
+            "OBJ_337"
          );
          defaultConfigurationIsVisible = "0";
          defaultConfigurationName = "Release";
       };
-      "OBJ_333" = {
+      "OBJ_336" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -2281,7 +2291,7 @@
          };
          name = "Debug";
       };
-      "OBJ_334" = {
+      "OBJ_337" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -2322,29 +2332,15 @@
          };
          name = "Release";
       };
-      "OBJ_335" = {
+      "OBJ_338" = {
          isa = "PBXSourcesBuildPhase";
          files = (
-            "OBJ_336"
-         );
-      };
-      "OBJ_336" = {
-         isa = "PBXBuildFile";
-         fileRef = "OBJ_84";
-      };
-      "OBJ_337" = {
-         isa = "PBXFrameworksBuildPhase";
-         files = (
+            "OBJ_339"
          );
       };
       "OBJ_339" = {
-         isa = "XCConfigurationList";
-         buildConfigurations = (
-            "OBJ_340",
-            "OBJ_341"
-         );
-         defaultConfigurationIsVisible = "0";
-         defaultConfigurationName = "Release";
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_84";
       };
       "OBJ_34" = {
          isa = "PBXFileReference";
@@ -2352,6 +2348,20 @@
          sourceTree = "<group>";
       };
       "OBJ_340" = {
+         isa = "PBXFrameworksBuildPhase";
+         files = (
+         );
+      };
+      "OBJ_342" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_343",
+            "OBJ_344"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_343" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -2392,7 +2402,7 @@
          };
          name = "Debug";
       };
-      "OBJ_341" = {
+      "OBJ_344" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -2433,31 +2443,31 @@
          };
          name = "Release";
       };
-      "OBJ_342" = {
+      "OBJ_345" = {
          isa = "PBXSourcesBuildPhase";
          files = (
-            "OBJ_343"
+            "OBJ_346"
          );
       };
-      "OBJ_343" = {
+      "OBJ_346" = {
          isa = "PBXBuildFile";
          fileRef = "OBJ_86";
       };
-      "OBJ_344" = {
+      "OBJ_347" = {
          isa = "PBXFrameworksBuildPhase";
          files = (
          );
       };
-      "OBJ_346" = {
+      "OBJ_348" = {
          isa = "XCConfigurationList";
          buildConfigurations = (
-            "OBJ_347",
-            "OBJ_348"
+            "OBJ_349",
+            "OBJ_350"
          );
          defaultConfigurationIsVisible = "0";
          defaultConfigurationName = "Release";
       };
-      "OBJ_347" = {
+      "OBJ_349" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -2498,7 +2508,12 @@
          };
          name = "Debug";
       };
-      "OBJ_348" = {
+      "OBJ_35" = {
+         isa = "PBXFileReference";
+         path = "Bundle+Version.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_350" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -2539,11 +2554,9 @@
          };
          name = "Release";
       };
-      "OBJ_349" = {
+      "OBJ_351" = {
          isa = "PBXSourcesBuildPhase";
          files = (
-            "OBJ_350",
-            "OBJ_351",
             "OBJ_352",
             "OBJ_353",
             "OBJ_354",
@@ -2560,53 +2573,42 @@
             "OBJ_365",
             "OBJ_366",
             "OBJ_367",
-            "OBJ_368"
+            "OBJ_368",
+            "OBJ_369",
+            "OBJ_370"
          );
-      };
-      "OBJ_35" = {
-         isa = "PBXFileReference";
-         path = "Bundle+Version.swift";
-         sourceTree = "<group>";
-      };
-      "OBJ_350" = {
-         isa = "PBXBuildFile";
-         fileRef = "OBJ_88";
-      };
-      "OBJ_351" = {
-         isa = "PBXBuildFile";
-         fileRef = "OBJ_89";
       };
       "OBJ_352" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_90";
+         fileRef = "OBJ_88";
       };
       "OBJ_353" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_91";
+         fileRef = "OBJ_89";
       };
       "OBJ_354" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_92";
+         fileRef = "OBJ_90";
       };
       "OBJ_355" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_93";
+         fileRef = "OBJ_91";
       };
       "OBJ_356" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_94";
+         fileRef = "OBJ_92";
       };
       "OBJ_357" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_95";
+         fileRef = "OBJ_93";
       };
       "OBJ_358" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_96";
+         fileRef = "OBJ_94";
       };
       "OBJ_359" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_97";
+         fileRef = "OBJ_95";
       };
       "OBJ_36" = {
          isa = "PBXFileReference";
@@ -2615,44 +2617,43 @@
       };
       "OBJ_360" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_98";
+         fileRef = "OBJ_96";
       };
       "OBJ_361" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_99";
+         fileRef = "OBJ_97";
       };
       "OBJ_362" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_100";
+         fileRef = "OBJ_98";
       };
       "OBJ_363" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_101";
+         fileRef = "OBJ_99";
       };
       "OBJ_364" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_102";
+         fileRef = "OBJ_100";
       };
       "OBJ_365" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_103";
+         fileRef = "OBJ_101";
       };
       "OBJ_366" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_104";
+         fileRef = "OBJ_102";
       };
       "OBJ_367" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_105";
+         fileRef = "OBJ_103";
       };
       "OBJ_368" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_106";
+         fileRef = "OBJ_104";
       };
       "OBJ_369" = {
-         isa = "PBXFrameworksBuildPhase";
-         files = (
-         );
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_105";
       };
       "OBJ_37" = {
          isa = "PBXFileReference";
@@ -2660,15 +2661,24 @@
          sourceTree = "<group>";
       };
       "OBJ_370" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_106";
+      };
+      "OBJ_371" = {
+         isa = "PBXFrameworksBuildPhase";
+         files = (
+         );
+      };
+      "OBJ_372" = {
          isa = "XCConfigurationList";
          buildConfigurations = (
-            "OBJ_371",
-            "OBJ_372"
+            "OBJ_373",
+            "OBJ_374"
          );
          defaultConfigurationIsVisible = "0";
          defaultConfigurationName = "Release";
       };
-      "OBJ_371" = {
+      "OBJ_373" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -2709,7 +2719,7 @@
          };
          name = "Debug";
       };
-      "OBJ_372" = {
+      "OBJ_374" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -2750,56 +2760,56 @@
          };
          name = "Release";
       };
-      "OBJ_373" = {
+      "OBJ_375" = {
          isa = "PBXSourcesBuildPhase";
          files = (
-            "OBJ_374",
-            "OBJ_375",
             "OBJ_376",
             "OBJ_377",
-            "OBJ_378"
+            "OBJ_378",
+            "OBJ_379",
+            "OBJ_380"
          );
-      };
-      "OBJ_374" = {
-         isa = "PBXBuildFile";
-         fileRef = "OBJ_108";
-      };
-      "OBJ_375" = {
-         isa = "PBXBuildFile";
-         fileRef = "OBJ_109";
       };
       "OBJ_376" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_110";
+         fileRef = "OBJ_108";
       };
       "OBJ_377" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_111";
+         fileRef = "OBJ_109";
       };
       "OBJ_378" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_112";
+         fileRef = "OBJ_110";
       };
       "OBJ_379" = {
-         isa = "PBXFrameworksBuildPhase";
-         files = (
-         );
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_111";
       };
       "OBJ_38" = {
          isa = "PBXFileReference";
          path = "Extend.swift";
          sourceTree = "<group>";
       };
+      "OBJ_380" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_112";
+      };
       "OBJ_381" = {
+         isa = "PBXFrameworksBuildPhase";
+         files = (
+         );
+      };
+      "OBJ_383" = {
          isa = "XCConfigurationList";
          buildConfigurations = (
-            "OBJ_382",
-            "OBJ_383"
+            "OBJ_384",
+            "OBJ_385"
          );
          defaultConfigurationIsVisible = "0";
          defaultConfigurationName = "Release";
       };
-      "OBJ_382" = {
+      "OBJ_384" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -2840,7 +2850,7 @@
          };
          name = "Debug";
       };
-      "OBJ_383" = {
+      "OBJ_385" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -2881,38 +2891,25 @@
          };
          name = "Release";
       };
-      "OBJ_384" = {
-         isa = "PBXSourcesBuildPhase";
-         files = (
-            "OBJ_385"
-         );
-      };
-      "OBJ_385" = {
-         isa = "PBXBuildFile";
-         fileRef = "OBJ_114";
-      };
       "OBJ_386" = {
-         isa = "PBXFrameworksBuildPhase";
+         isa = "PBXSourcesBuildPhase";
          files = (
             "OBJ_387"
          );
       };
       "OBJ_387" = {
          isa = "PBXBuildFile";
-         fileRef = "Extend::DataBase::Product";
+         fileRef = "OBJ_114";
       };
       "OBJ_388" = {
-         isa = "PBXTargetDependency";
-         target = "Extend::DataBase";
+         isa = "PBXFrameworksBuildPhase";
+         files = (
+            "OBJ_389"
+         );
       };
       "OBJ_389" = {
-         isa = "XCConfigurationList";
-         buildConfigurations = (
-            "OBJ_390",
-            "OBJ_391"
-         );
-         defaultConfigurationIsVisible = "0";
-         defaultConfigurationName = "Release";
+         isa = "PBXBuildFile";
+         fileRef = "Extend::DataBase::Product";
       };
       "OBJ_39" = {
          isa = "PBXFileReference";
@@ -2920,6 +2917,19 @@
          sourceTree = "<group>";
       };
       "OBJ_390" = {
+         isa = "PBXTargetDependency";
+         target = "Extend::DataBase";
+      };
+      "OBJ_391" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_392",
+            "OBJ_393"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_392" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -2960,7 +2970,7 @@
          };
          name = "Debug";
       };
-      "OBJ_391" = {
+      "OBJ_393" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -3001,45 +3011,35 @@
          };
          name = "Release";
       };
-      "OBJ_392" = {
+      "OBJ_394" = {
          isa = "PBXSourcesBuildPhase";
          files = (
-            "OBJ_393",
-            "OBJ_394",
             "OBJ_395",
             "OBJ_396",
-            "OBJ_397"
-         );
-      };
-      "OBJ_393" = {
-         isa = "PBXBuildFile";
-         fileRef = "OBJ_116";
-      };
-      "OBJ_394" = {
-         isa = "PBXBuildFile";
-         fileRef = "OBJ_117";
-      };
-      "OBJ_395" = {
-         isa = "PBXBuildFile";
-         fileRef = "OBJ_118";
-      };
-      "OBJ_396" = {
-         isa = "PBXBuildFile";
-         fileRef = "OBJ_119";
-      };
-      "OBJ_397" = {
-         isa = "PBXBuildFile";
-         fileRef = "OBJ_120";
-      };
-      "OBJ_398" = {
-         isa = "PBXFrameworksBuildPhase";
-         files = (
+            "OBJ_397",
+            "OBJ_398",
             "OBJ_399"
          );
       };
+      "OBJ_395" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_116";
+      };
+      "OBJ_396" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_117";
+      };
+      "OBJ_397" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_118";
+      };
+      "OBJ_398" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_119";
+      };
       "OBJ_399" = {
          isa = "PBXBuildFile";
-         fileRef = "Extend::Protocolar::Product";
+         fileRef = "OBJ_120";
       };
       "OBJ_4" = {
          isa = "XCBuildConfiguration";
@@ -3084,19 +3084,29 @@
          sourceTree = "<group>";
       };
       "OBJ_400" = {
+         isa = "PBXFrameworksBuildPhase";
+         files = (
+            "OBJ_401"
+         );
+      };
+      "OBJ_401" = {
+         isa = "PBXBuildFile";
+         fileRef = "Extend::Protocolar::Product";
+      };
+      "OBJ_402" = {
          isa = "PBXTargetDependency";
          target = "Extend::Protocolar";
       };
-      "OBJ_401" = {
+      "OBJ_403" = {
          isa = "XCConfigurationList";
          buildConfigurations = (
-            "OBJ_402",
-            "OBJ_403"
+            "OBJ_404",
+            "OBJ_405"
          );
          defaultConfigurationIsVisible = "0";
          defaultConfigurationName = "Release";
       };
-      "OBJ_402" = {
+      "OBJ_404" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -3137,7 +3147,7 @@
          };
          name = "Debug";
       };
-      "OBJ_403" = {
+      "OBJ_405" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -3178,11 +3188,9 @@
          };
          name = "Release";
       };
-      "OBJ_404" = {
+      "OBJ_406" = {
          isa = "PBXSourcesBuildPhase";
          files = (
-            "OBJ_405",
-            "OBJ_406",
             "OBJ_407",
             "OBJ_408",
             "OBJ_409",
@@ -3190,28 +3198,22 @@
             "OBJ_411",
             "OBJ_412",
             "OBJ_413",
-            "OBJ_414"
+            "OBJ_414",
+            "OBJ_415",
+            "OBJ_416"
          );
-      };
-      "OBJ_405" = {
-         isa = "PBXBuildFile";
-         fileRef = "OBJ_122";
-      };
-      "OBJ_406" = {
-         isa = "PBXBuildFile";
-         fileRef = "OBJ_123";
       };
       "OBJ_407" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_124";
+         fileRef = "OBJ_122";
       };
       "OBJ_408" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_125";
+         fileRef = "OBJ_123";
       };
       "OBJ_409" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_126";
+         fileRef = "OBJ_124";
       };
       "OBJ_41" = {
          isa = "PBXFileReference";
@@ -3220,119 +3222,45 @@
       };
       "OBJ_410" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_127";
+         fileRef = "OBJ_125";
       };
       "OBJ_411" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_128";
+         fileRef = "OBJ_126";
       };
       "OBJ_412" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_129";
+         fileRef = "OBJ_127";
       };
       "OBJ_413" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_130";
+         fileRef = "OBJ_128";
       };
       "OBJ_414" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_131";
+         fileRef = "OBJ_129";
       };
       "OBJ_415" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_130";
+      };
+      "OBJ_416" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_131";
+      };
+      "OBJ_417" = {
          isa = "PBXFrameworksBuildPhase";
          files = (
          );
       };
-      "OBJ_417" = {
+      "OBJ_419" = {
          isa = "XCConfigurationList";
          buildConfigurations = (
-            "OBJ_418",
-            "OBJ_419"
+            "OBJ_420",
+            "OBJ_421"
          );
          defaultConfigurationIsVisible = "0";
          defaultConfigurationName = "Release";
-      };
-      "OBJ_418" = {
-         isa = "XCBuildConfiguration";
-         buildSettings = {
-            ENABLE_TESTABILITY = "YES";
-            FRAMEWORK_SEARCH_PATHS = (
-               "$(inherited)",
-               "$(PLATFORM_DIR)/Developer/Library/Frameworks"
-            );
-            HEADER_SEARCH_PATHS = (
-               "$(inherited)"
-            );
-            INFOPLIST_FILE = "Extend.xcodeproj/RichText_Info.plist";
-            IPHONEOS_DEPLOYMENT_TARGET = "8.0";
-            LD_RUNPATH_SEARCH_PATHS = (
-               "$(inherited)",
-               "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx"
-            );
-            MACOSX_DEPLOYMENT_TARGET = "10.11";
-            OTHER_CFLAGS = (
-               "$(inherited)"
-            );
-            OTHER_LDFLAGS = (
-               "$(inherited)"
-            );
-            OTHER_SWIFT_FLAGS = (
-               "$(inherited)"
-            );
-            PRODUCT_BUNDLE_IDENTIFIER = "RichText";
-            PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
-            PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-            SKIP_INSTALL = "YES";
-            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-               "$(inherited)"
-            );
-            SWIFT_VERSION = "5.0";
-            TARGET_NAME = "RichText";
-            TVOS_DEPLOYMENT_TARGET = "9.0";
-            WATCHOS_DEPLOYMENT_TARGET = "2.0";
-         };
-         name = "Debug";
-      };
-      "OBJ_419" = {
-         isa = "XCBuildConfiguration";
-         buildSettings = {
-            ENABLE_TESTABILITY = "YES";
-            FRAMEWORK_SEARCH_PATHS = (
-               "$(inherited)",
-               "$(PLATFORM_DIR)/Developer/Library/Frameworks"
-            );
-            HEADER_SEARCH_PATHS = (
-               "$(inherited)"
-            );
-            INFOPLIST_FILE = "Extend.xcodeproj/RichText_Info.plist";
-            IPHONEOS_DEPLOYMENT_TARGET = "8.0";
-            LD_RUNPATH_SEARCH_PATHS = (
-               "$(inherited)",
-               "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx"
-            );
-            MACOSX_DEPLOYMENT_TARGET = "10.11";
-            OTHER_CFLAGS = (
-               "$(inherited)"
-            );
-            OTHER_LDFLAGS = (
-               "$(inherited)"
-            );
-            OTHER_SWIFT_FLAGS = (
-               "$(inherited)"
-            );
-            PRODUCT_BUNDLE_IDENTIFIER = "RichText";
-            PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
-            PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-            SKIP_INSTALL = "YES";
-            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-               "$(inherited)"
-            );
-            SWIFT_VERSION = "5.0";
-            TARGET_NAME = "RichText";
-            TVOS_DEPLOYMENT_TARGET = "9.0";
-            WATCHOS_DEPLOYMENT_TARGET = "2.0";
-         };
-         name = "Release";
       };
       "OBJ_42" = {
          isa = "PBXFileReference";
@@ -3340,50 +3268,137 @@
          sourceTree = "<group>";
       };
       "OBJ_420" = {
-         isa = "PBXSourcesBuildPhase";
-         files = (
-            "OBJ_421",
-            "OBJ_422",
-            "OBJ_423",
-            "OBJ_424",
-            "OBJ_425"
-         );
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            ENABLE_TESTABILITY = "YES";
+            FRAMEWORK_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(PLATFORM_DIR)/Developer/Library/Frameworks"
+            );
+            HEADER_SEARCH_PATHS = (
+               "$(inherited)"
+            );
+            INFOPLIST_FILE = "Extend.xcodeproj/RichText_Info.plist";
+            IPHONEOS_DEPLOYMENT_TARGET = "8.0";
+            LD_RUNPATH_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.11";
+            OTHER_CFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_LDFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)"
+            );
+            PRODUCT_BUNDLE_IDENTIFIER = "RichText";
+            PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+            PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+            SKIP_INSTALL = "YES";
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)"
+            );
+            SWIFT_VERSION = "5.0";
+            TARGET_NAME = "RichText";
+            TVOS_DEPLOYMENT_TARGET = "9.0";
+            WATCHOS_DEPLOYMENT_TARGET = "2.0";
+         };
+         name = "Debug";
       };
       "OBJ_421" = {
-         isa = "PBXBuildFile";
-         fileRef = "OBJ_133";
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            ENABLE_TESTABILITY = "YES";
+            FRAMEWORK_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(PLATFORM_DIR)/Developer/Library/Frameworks"
+            );
+            HEADER_SEARCH_PATHS = (
+               "$(inherited)"
+            );
+            INFOPLIST_FILE = "Extend.xcodeproj/RichText_Info.plist";
+            IPHONEOS_DEPLOYMENT_TARGET = "8.0";
+            LD_RUNPATH_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.11";
+            OTHER_CFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_LDFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)"
+            );
+            PRODUCT_BUNDLE_IDENTIFIER = "RichText";
+            PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+            PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+            SKIP_INSTALL = "YES";
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)"
+            );
+            SWIFT_VERSION = "5.0";
+            TARGET_NAME = "RichText";
+            TVOS_DEPLOYMENT_TARGET = "9.0";
+            WATCHOS_DEPLOYMENT_TARGET = "2.0";
+         };
+         name = "Release";
       };
       "OBJ_422" = {
-         isa = "PBXBuildFile";
-         fileRef = "OBJ_134";
+         isa = "PBXSourcesBuildPhase";
+         files = (
+            "OBJ_423",
+            "OBJ_424",
+            "OBJ_425",
+            "OBJ_426",
+            "OBJ_427"
+         );
       };
       "OBJ_423" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_135";
+         fileRef = "OBJ_133";
       };
       "OBJ_424" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_136";
+         fileRef = "OBJ_134";
       };
       "OBJ_425" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_137";
+         fileRef = "OBJ_135";
       };
       "OBJ_426" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_136";
+      };
+      "OBJ_427" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_137";
+      };
+      "OBJ_428" = {
          isa = "PBXFrameworksBuildPhase";
          files = (
          );
       };
-      "OBJ_428" = {
+      "OBJ_43" = {
+         isa = "PBXFileReference";
+         path = "Optional+SafeUnwrap.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_430" = {
          isa = "XCConfigurationList";
          buildConfigurations = (
-            "OBJ_429",
-            "OBJ_430"
+            "OBJ_431",
+            "OBJ_432"
          );
          defaultConfigurationIsVisible = "0";
          defaultConfigurationName = "Release";
       };
-      "OBJ_429" = {
+      "OBJ_431" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -3425,12 +3440,7 @@
          };
          name = "Debug";
       };
-      "OBJ_43" = {
-         isa = "PBXFileReference";
-         path = "Optional+SafeUnwrap.swift";
-         sourceTree = "<group>";
-      };
-      "OBJ_430" = {
+      "OBJ_432" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -3472,11 +3482,9 @@
          };
          name = "Release";
       };
-      "OBJ_431" = {
+      "OBJ_433" = {
          isa = "PBXSourcesBuildPhase";
          files = (
-            "OBJ_432",
-            "OBJ_433",
             "OBJ_434",
             "OBJ_435",
             "OBJ_436",
@@ -3490,40 +3498,34 @@
             "OBJ_444",
             "OBJ_445",
             "OBJ_446",
-            "OBJ_447"
+            "OBJ_447",
+            "OBJ_448",
+            "OBJ_449"
          );
-      };
-      "OBJ_432" = {
-         isa = "PBXBuildFile";
-         fileRef = "OBJ_139";
-      };
-      "OBJ_433" = {
-         isa = "PBXBuildFile";
-         fileRef = "OBJ_140";
       };
       "OBJ_434" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_141";
+         fileRef = "OBJ_139";
       };
       "OBJ_435" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_142";
+         fileRef = "OBJ_140";
       };
       "OBJ_436" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_143";
+         fileRef = "OBJ_141";
       };
       "OBJ_437" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_144";
+         fileRef = "OBJ_142";
       };
       "OBJ_438" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_145";
+         fileRef = "OBJ_143";
       };
       "OBJ_439" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_146";
+         fileRef = "OBJ_144";
       };
       "OBJ_44" = {
          isa = "PBXFileReference";
@@ -3532,45 +3534,43 @@
       };
       "OBJ_440" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_147";
+         fileRef = "OBJ_145";
       };
       "OBJ_441" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_148";
+         fileRef = "OBJ_146";
       };
       "OBJ_442" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_149";
+         fileRef = "OBJ_147";
       };
       "OBJ_443" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_150";
+         fileRef = "OBJ_148";
       };
       "OBJ_444" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_151";
+         fileRef = "OBJ_149";
       };
       "OBJ_445" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_152";
+         fileRef = "OBJ_150";
       };
       "OBJ_446" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_153";
+         fileRef = "OBJ_151";
       };
       "OBJ_447" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_154";
+         fileRef = "OBJ_152";
       };
       "OBJ_448" = {
-         isa = "PBXFrameworksBuildPhase";
-         files = (
-            "OBJ_449"
-         );
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_153";
       };
       "OBJ_449" = {
          isa = "PBXBuildFile";
-         fileRef = "Extend::DataBase::Product";
+         fileRef = "OBJ_154";
       };
       "OBJ_45" = {
          isa = "PBXFileReference";
@@ -3578,19 +3578,29 @@
          sourceTree = "<group>";
       };
       "OBJ_450" = {
+         isa = "PBXFrameworksBuildPhase";
+         files = (
+            "OBJ_451"
+         );
+      };
+      "OBJ_451" = {
+         isa = "PBXBuildFile";
+         fileRef = "Extend::DataBase::Product";
+      };
+      "OBJ_452" = {
          isa = "PBXTargetDependency";
          target = "Extend::DataBase";
       };
-      "OBJ_452" = {
+      "OBJ_454" = {
          isa = "XCConfigurationList";
          buildConfigurations = (
-            "OBJ_453",
-            "OBJ_454"
+            "OBJ_455",
+            "OBJ_456"
          );
          defaultConfigurationIsVisible = "0";
          defaultConfigurationName = "Release";
       };
-      "OBJ_453" = {
+      "OBJ_455" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -3631,7 +3641,7 @@
          };
          name = "Debug";
       };
-      "OBJ_454" = {
+      "OBJ_456" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -3672,36 +3682,36 @@
          };
          name = "Release";
       };
-      "OBJ_455" = {
+      "OBJ_457" = {
          isa = "PBXSourcesBuildPhase";
          files = (
-            "OBJ_456"
+            "OBJ_458"
          );
       };
-      "OBJ_456" = {
+      "OBJ_458" = {
          isa = "PBXBuildFile";
          fileRef = "OBJ_156";
       };
-      "OBJ_457" = {
+      "OBJ_459" = {
          isa = "PBXFrameworksBuildPhase";
          files = (
          );
-      };
-      "OBJ_459" = {
-         isa = "XCConfigurationList";
-         buildConfigurations = (
-            "OBJ_460",
-            "OBJ_461"
-         );
-         defaultConfigurationIsVisible = "0";
-         defaultConfigurationName = "Release";
       };
       "OBJ_46" = {
          isa = "PBXFileReference";
          path = "Path.swift";
          sourceTree = "<group>";
       };
-      "OBJ_460" = {
+      "OBJ_461" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_462",
+            "OBJ_463"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_462" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -3742,7 +3752,7 @@
          };
          name = "Debug";
       };
-      "OBJ_461" = {
+      "OBJ_463" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -3783,31 +3793,31 @@
          };
          name = "Release";
       };
-      "OBJ_462" = {
+      "OBJ_464" = {
          isa = "PBXSourcesBuildPhase";
          files = (
-            "OBJ_463"
+            "OBJ_465"
          );
       };
-      "OBJ_463" = {
+      "OBJ_465" = {
          isa = "PBXBuildFile";
          fileRef = "OBJ_158";
       };
-      "OBJ_464" = {
+      "OBJ_466" = {
          isa = "PBXFrameworksBuildPhase";
          files = (
          );
       };
-      "OBJ_466" = {
+      "OBJ_468" = {
          isa = "XCConfigurationList";
          buildConfigurations = (
-            "OBJ_467",
-            "OBJ_468"
+            "OBJ_469",
+            "OBJ_470"
          );
          defaultConfigurationIsVisible = "0";
          defaultConfigurationName = "Release";
       };
-      "OBJ_467" = {
+      "OBJ_469" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -3848,7 +3858,12 @@
          };
          name = "Debug";
       };
-      "OBJ_468" = {
+      "OBJ_47" = {
+         isa = "PBXFileReference";
+         path = "RawRepresentable+Expressible.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_470" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
             ENABLE_TESTABILITY = "YES";
@@ -3889,22 +3904,17 @@
          };
          name = "Release";
       };
-      "OBJ_469" = {
+      "OBJ_471" = {
          isa = "PBXSourcesBuildPhase";
          files = (
-            "OBJ_470"
+            "OBJ_472"
          );
       };
-      "OBJ_47" = {
-         isa = "PBXFileReference";
-         path = "RawRepresentable+Expressible.swift";
-         sourceTree = "<group>";
-      };
-      "OBJ_470" = {
+      "OBJ_472" = {
          isa = "PBXBuildFile";
          fileRef = "OBJ_160";
       };
-      "OBJ_471" = {
+      "OBJ_473" = {
          isa = "PBXFrameworksBuildPhase";
          files = (
          );

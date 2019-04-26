@@ -123,7 +123,7 @@ let package = Package(
             dependencies: []),
         .target(
             name: "HTTP",
-            dependencies: ["MD5","Extend"]),
+            dependencies: ["MD5","Extend","JSON"]),
         .target(
             name: "HTTPClient",
             dependencies: []),

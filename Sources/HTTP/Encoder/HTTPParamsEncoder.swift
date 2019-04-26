@@ -5,6 +5,7 @@
 //  Created by bujiandi on 2018/9/30.
 //
 
+import Extend
 import Foundation
 
 extension HTTP {

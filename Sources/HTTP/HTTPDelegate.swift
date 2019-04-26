@@ -5,6 +5,7 @@
 //  Created by 李招利 on 2018/10/8.
 //
 import Foundation
+import Extend
 
 // MARK: 即将下载
 extension HTTP._Delegate {

@@ -7,4 +7,5 @@
 
 @_exported import Operator
 @_exported import Protocolar
+@_exported import Foundation
 
