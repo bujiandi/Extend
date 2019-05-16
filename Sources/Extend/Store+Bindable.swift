@@ -2,10 +2,13 @@
 //  StoreBindable.swift
 //  Basic
 //
-//  Created by 慧趣小歪 on 2018/11/24.
+//  Created by bujiandi on 2018/11/24.
 //
 
 import Protocolar
+import Foundation
+
+extension NSObject: Bindable {}
 
 extension Bindable {
     

@@ -5,7 +5,6 @@
 //  Created by bujiandi on 2018/6/13.
 //
 
-//import Foundation
 import Protocolar
 
 open class Cache<Key: Hashable, Element> {
