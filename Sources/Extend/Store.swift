@@ -11,37 +11,68 @@ import Protocolar
 #if canImport(Foundation)
 import Foundation
 #endif
+
+//infix operator <=> : AssignmentPrecedence
+
 /// 数据监听器
 public final class Store<T> {
     
+//    @inlinable public static func <=><T>(lhs:Store<T>, rhs:Store<T>) {
+//        bind(lhs, rhs)
+//    }
+//    
+//    @inlinable public static func bind<T>(_ lhs:Store<T>, _ rhs:Store<T>) {
+//        lhs.subscribe(rhs)
+//    }
+    
+    public func subscribe(_ store:Store<T>) {
+        binders.append(WeakContainer(store))
+        store.binders.append(WeakContainer(self))
+        setValue(store.value)
+    }
+    
     private var observers : [Observer<T>] = []
+    private var binders: [WeakContainer<Store<T>>] = []
+    
+    private func notifyChanged(_ oldValue:T,to newValue:T) {
+        let filterObservers:() -> Void = { [unowned self] in
+            
+            self.observers = self.observers.filter {
+                if $0.target == nil { return false }
+                $0.notifyChanged(newValue, oldValue)
+                return true
+            }
+        }
+        
+        #if canImport(Foundation)
+        if Thread.current.isMainThread {
+            filterObservers()
+        } else {
+            DispatchQueue.main.sync(execute: filterObservers)
+        }
+        #else
+        filterObservers()
+        #endif
+
+    }
+    
+    @discardableResult
+    private func setValue(_ newValue:T) -> Bool {
+        let oldValue = _value
+        _value = newValue
+        
+        notifyChanged(oldValue, to: newValue)
+        return true
+    }
     
     internal var _value : T
     public var value : T {
         get { return _value }
         set {
-            let oldValue = _value
-            _value = newValue
-            
-            let filterObservers:() -> Void = { [unowned self] in
-                
-                self.observers = self.observers.filter {
-                    if $0.target == nil { return false }
-                    $0.notifyChanged(newValue, oldValue)
-                    return true
-                }
+            setValue(newValue)
+            self.binders = self.binders.filter {
+                $0.obj?.setValue(newValue) ?? false
             }
-            
-            #if canImport(Foundation)
-            if Thread.current.isMainThread {
-                filterObservers()
-            } else {
-                DispatchQueue.main.sync(execute: filterObservers)
-            }
-            #else
-            filterObservers()
-            #endif
-            
         }
         
     }
