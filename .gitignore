@@ -7,3 +7,4 @@ WorkspaceSettings.xcsettings
 IDEWorkspaceChecks.plist
 /.build
 *.xcbkptlist
+.DS_Store
