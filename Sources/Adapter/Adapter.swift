@@ -1,4 +1,4 @@
-public protocol Displayer {
+public protocol Adapter {
     
     associatedtype View
     associatedtype Data
