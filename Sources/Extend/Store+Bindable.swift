@@ -7,6 +7,7 @@
 
 import Protocolar
 import Foundation
+import Adapter
 
 extension NSObject: Bindable {}
 
@@ -18,6 +19,15 @@ extension Bindable {
             if let this = self {
                 onChange(ObservedChange(this, $0.new, $0.old))
             }
+        }
+    }
+    
+    /// 绑定keyPath的可选属性和监听枚举数据
+    @discardableResult
+    public func bind<A: Adapter, Value>(_ adapter:A,_ store:Store<Value>) -> Store<Value>.Notice<Value> where A.View == Self, A.Data == Value {
+        return store.addObserver(self) { [weak self] in
+            guard let self = self else { return }
+            adapter.update(self, by: $0.new)
         }
     }
     

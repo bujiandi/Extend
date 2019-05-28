@@ -495,7 +495,7 @@ extension Store : Collection where T : Collection {
     public typealias Index = T.Index
     
     @inlinable public var startIndex: T.Index { return value.startIndex }
-    @inlinable public var endIndex: T.Index { return value.startIndex }
+    @inlinable public var endIndex: T.Index { return value.endIndex }
 
     @inlinable public subscript(position: T.Index) -> T.Element {
         return value[position]

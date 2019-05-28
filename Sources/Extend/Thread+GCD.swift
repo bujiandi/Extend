@@ -45,3 +45,10 @@ extension DispatchQueue {
     }
     
 }
+
+// 同步锁
+public func synchronized(_ obj: Any, execute closure: @escaping @convention(block) () -> Void) {
+    objc_sync_enter(obj)
+    closure()
+    objc_sync_exit(obj)
+}

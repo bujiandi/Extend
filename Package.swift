@@ -99,7 +99,7 @@ let package = Package(
             dependencies: ["Protocolar"]),
         .target(
             name: "Extend",
-            dependencies: ["Protocolar", "Operator"],
+            dependencies: ["Protocolar", "Operator", "Adapter"],
             swiftSettings: [
                 .define("DEBUG", .when(configuration: .debug)),
             ]),
