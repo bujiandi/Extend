@@ -34,7 +34,14 @@ public final class Store<T> {
     private var observers : [Observer<T>] = []
     private var binders: [WeakContainer<Store<T>>] = []
     
-    private func notifyChanged(_ oldValue:T,to newValue:T) {
+    public func notifyChanged() {
+        setValue(_value)
+        binders = binders.filter {
+            $0.obj?.setValue(_value) ?? false
+        }
+    }
+    
+    private func _notifyChanged(_ oldValue:T,to newValue:T) {
         let filterObservers:() -> Void = { [unowned self] in
             
             self.observers = self.observers.filter {
@@ -61,7 +68,7 @@ public final class Store<T> {
         let oldValue = _value
         _value = newValue
         
-        notifyChanged(oldValue, to: newValue)
+        _notifyChanged(oldValue, to: newValue)
         return true
     }
     
