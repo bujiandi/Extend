@@ -44,6 +44,9 @@ extension JSON {
         /// The strategy to url if lose host relative base. Defaults to `.throw`.
         open var urlDecodingStrategy: JSONDecoder.URLDecodingStrategy = DefaultStrategy.url
         
+        /// The strategy to array if null. Defaults to `.ignore`.
+        open var arrayNullDecodingStrategy: JSONDecoder.ArrayNullDecodingStrategy = DefaultStrategy.arrayNull
+        
         /// Contextual user-provided information for use during decoding.
         open var userInfo: [CodingUserInfoKey : Any] = DefaultStrategy.userInfo
         
@@ -74,6 +77,9 @@ extension JSON {
             /// The strategy to url if lose host relative base. Defaults to `.throw`.
             public static var url: JSONDecoder.URLDecodingStrategy = .throw
             
+            /// The strategy to array if null. Defaults to `.ignore`.
+            public static var arrayNull: JSONDecoder.ArrayNullDecodingStrategy = .ignore
+            
             /// Contextual user-provided information for use during decoding.
             public static var userInfo: [CodingUserInfoKey : Any] = [:]
         }
@@ -86,6 +92,7 @@ extension JSON {
             let keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy
             let numberOverflowDecodingStrategy: JSONDecoder.NumberOverflowDecodingStrategy
             let urlDecodingStrategy: JSONDecoder.URLDecodingStrategy
+            let arrayNullDecodingStrategy: JSONDecoder.ArrayNullDecodingStrategy
             let userInfo: [CodingUserInfoKey : Any]
         }
         
@@ -97,6 +104,7 @@ extension JSON {
                             keyDecodingStrategy: keyDecodingStrategy,
                             numberOverflowDecodingStrategy: numberOverflowDecodingStrategy,
                             urlDecodingStrategy: urlDecodingStrategy,
+                            arrayNullDecodingStrategy: arrayNullDecodingStrategy,
                             userInfo: userInfo)
         }
 
@@ -201,22 +209,39 @@ fileprivate class _JSONDecoder : Decoder {
     }
     
     public func unkeyedContainer() throws -> UnkeyedDecodingContainer {
-        var value = storage.topContainer
-        if value.isNull {
-            value = JSON.array([])
-        }
-        
-        guard !value.isError else {
+        let value = storage.topContainer
+        switch value {
+        case .null:
+            switch options.arrayNullDecodingStrategy {
+            case .ignore:
+                return _JSONUnkeyedDecodingContainer(referencing: self, wrapping: [])
+            case .throw: break
+            }
+            fallthrough
+        case .error:
             throw DecodingError.valueNotFound(UnkeyedDecodingContainer.self,
                                               DecodingError.Context(codingPath: codingPath,
                                                                     debugDescription: "Cannot get unkeyed decoding container -- found null value instead."))
-        }
-        
-        guard case .array(let list) = value else {
+        case .array(let list):
+            return _JSONUnkeyedDecodingContainer(referencing: self, wrapping: list)
+        default:
             throw DecodingError._typeMismatch(at: codingPath, expectation: JSON.Array.self, reality: value)
         }
-        
-        return _JSONUnkeyedDecodingContainer(referencing: self, wrapping: list)
+//        if value.isNull {
+//            value = JSON.array([])
+//        }
+//
+//        guard !value.isError else {
+//            throw DecodingError.valueNotFound(UnkeyedDecodingContainer.self,
+//                                              DecodingError.Context(codingPath: codingPath,
+//                                                                    debugDescription: "Cannot get unkeyed decoding container -- found null value instead."))
+//        }
+//
+//        guard case .array(let list) = value else {
+//            throw DecodingError._typeMismatch(at: codingPath, expectation: JSON.Array.self, reality: value)
+//        }
+//
+//        return _JSONUnkeyedDecodingContainer(referencing: self, wrapping: list)
     }
     
     public func singleValueContainer() throws -> SingleValueDecodingContainer {
@@ -610,33 +635,18 @@ fileprivate struct _JSONKeyedDecodingContainer<K : CodingKey> : KeyedDecodingCon
         
         return value
     }
+ 
     
     public func decode<T : Decodable>(_ type: T.Type, forKey key: Key) throws -> T {
-        
-//        guard let entry = _jsonValue(key.stringValue) else {
-//            throw DecodingError.keyNotFound(key, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "No value associated with key \(_errorDescription(of: key))."))
-//        }
-        decoder.storage.push(container: _jsonValue(key.stringValue) ?? JSON.null)
+
         decoder.codingPath.append(key)
-        defer {
-            decoder.storage.popContainer()
-            decoder.codingPath.removeLast()
+        defer { decoder.codingPath.removeLast() }
+
+        guard let value = try decoder.unbox(_jsonValue(key.stringValue) ?? .null, as: type) else {
+            throw DecodingError.valueNotFound(type, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Expected \(type) value but found null instead."))
         }
-        return try T(from: decoder)
-//        let entry = _jsonValue(key.stringValue) ?? JSON.null
-//        if entry.isNull, T.self == Array<Any>.self {
-//            let value = try decoder.unbox(JSON.array([]), as: type)
-//            return value!
-//        }
-//
-//        decoder.codingPath.append(key)
-//        defer { decoder.codingPath.removeLast() }
-//
-//        guard let value = try decoder.unbox(entry, as: type) else {
-//            throw DecodingError.valueNotFound(type, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Expected \(type) value but found null instead."))
-//        }
-//
-//        return value
+
+        return value
     }
     
     public func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type, forKey key: Key) throws -> KeyedDecodingContainer<NestedKey> {
@@ -1389,18 +1399,15 @@ extension _JSONDecoder {
         }
     }
     
-    /// 似乎没什么用
-    fileprivate func unbox<S: Decodable>(_ value: JSON, as type: [S].Type) throws -> [S] {
-        guard case .array(let list) = value else {
-            throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
-        }
-        storage.push(container: value.isNull ? JSON.array([]) : value)
-        defer { storage.popContainer() }
-        return try [S](from: self)
-    }
     
     fileprivate func unbox<T : Decodable>(_ value: JSON, as type: T.Type) throws -> T? {
-        if value.isNull { return nil }
+        if case .null = value {
+            // 防止数组给空或其他允许为空的类型崩溃
+            self.storage.push(container: value)
+            defer { self.storage.popContainer() }
+            return try type.init(from: self)
+//            return nil
+        }
         
         let decoded: T
         
@@ -1484,10 +1491,14 @@ extension _JSONDecoder {
             decoded = object as! T
         } else if T.self == JSON.Array.self, case .array(let list) = value {
             decoded = list as! T
+        }  else if T.self == JSON.Array.self, case .null = value {
+            decoded = [] as! T
         } else if T.self == [String:JSON].self, case .object(let object) = value {
             decoded = object._map as! T
         } else if T.self == [JSON].self, case .array(let list) = value {
             decoded = list.rawValue as! T
+        } else if T.self == [JSON].self, case .null = value {
+            decoded = [] as! T
         } else {
             self.storage.push(container: value)
             defer { self.storage.popContainer() }

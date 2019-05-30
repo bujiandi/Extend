@@ -180,6 +180,11 @@ extension Data {
 
 extension JSONDecoder {
     
+    public enum ArrayNullDecodingStrategy {
+        case ignore
+        case `throw`
+    }
+    
     public enum NumberOverflowDecodingStrategy {
         case ignore
         case `throw`
