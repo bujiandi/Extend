@@ -11,6 +11,14 @@ import Adapter
 
 extension NSObject: Bindable {}
 
+extension Adapter where Self: AnyObject {
+    
+    @discardableResult
+    @inlinable public func bind<View: Bindable, Value>(_ view:View,_ store:Store<Value>) -> Store<Value>.Notice<Value> where View == Self.View, Self.Data == Value {
+        return view.bind(self, store)
+    }
+}
+
 extension Bindable {
     
     @discardableResult
@@ -24,10 +32,10 @@ extension Bindable {
     
     /// 绑定keyPath的可选属性和监听枚举数据
     @discardableResult
-    public func bind<A: Adapter, Value>(_ adapter:A,_ store:Store<Value>) -> Store<Value>.Notice<Value> where A.View == Self, A.Data == Value {
-        return store.addObserver(self) { [weak self] in
+    public func bind<A: Adapter & AnyObject, Value>(_ adapter:A,_ store:Store<Value>) -> Store<Value>.Notice<Value> where A.View == Self, A.Data == Value {
+        return store.addObserver(self) { [weak self, weak adapter] in
             guard let self = self else { return }
-            adapter.update(self, by: $0.new)
+            adapter?.update(self, by: $0.new)
         }
     }
     
