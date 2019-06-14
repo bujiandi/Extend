@@ -192,7 +192,7 @@ extension HTTP.Queue {
             
             // 如果续传文件存在 则 从断点续传 下载 否则 开始新的下载
             if fileManager.fileExists(atPath: cacheDataPath, isDirectory: &isDir) && !isDir.boolValue {
-                var data = try! Data(contentsOf: URL(fileURLWithPath: cacheDataPath, isDirectory: false))
+                let data = try! Data(contentsOf: URL(fileURLWithPath: cacheDataPath, isDirectory: false))
                 
 //                let datas = NSMutableData()
 //                var totalSize:Int64 = 0

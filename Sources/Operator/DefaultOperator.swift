@@ -8,7 +8,12 @@
 import Protocolar
 
 /// 排除 isEmpty 的情况
-@inlinable public func ???<T:Emptiable>(lhs: @autoclosure () -> T?, rhs: @autoclosure () -> T) -> T {
-    let value = lhs() ?? rhs()
+@inlinable public func ???<T:Emptiable>(lhs: T?, rhs: @autoclosure () -> T) -> T {
+    let value = lhs ?? rhs()
     return value.isEmpty ? rhs() : value
+}
+
+/// 可选执行表达式
+@inlinable public func ??<T>(lhs: Bool, rhs: @autoclosure () -> T) -> T? {
+    return lhs ? rhs() : nil
 }
