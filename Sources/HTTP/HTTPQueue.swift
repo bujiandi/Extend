@@ -273,9 +273,9 @@ extension HTTP.Queue {
         _retryOverlay = overlay
     }
     
-    public func change(state:Store<HTTP.State>) {
+    public func change(state:Storage<HTTP.State>) {
         
-        _states.append(WeakContainer<Store<HTTP.State>>(state))
+        _states.append(WeakContainer<Storage<HTTP.State>>(state))
         state.value = _state
     }
     

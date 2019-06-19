@@ -82,96 +82,96 @@ extension String {
     }
     
     // MARK: - 取路径末尾文件名
-    public var stringByDeletingPathPrefix:String {
+    @inlinable public var stringByDeletingPathPrefix:String {
         return components(separatedBy: "/").last ?? ""
     }
     // MARK: - 长度
-    public var length:Int {
+    @inlinable public var length:Int {
         return distance(from: startIndex, to: endIndex)
     }
     
     // MARK: - 字符串截取
-    public func substring(to index:Int) -> String {
+    @inlinable public func substring(to index:Int) -> String {
         return String(self[...self.index(startIndex, offsetBy: index)])
     }
-    public func substring(from index:Int) -> String {
+    @inlinable public func substring(from index:Int) -> String {
         return String(self[self.index(startIndex, offsetBy: index)...])
     }
     
-    public subscript(index:Int) -> Character {
+    @inlinable public subscript(index:Int) -> Character {
         return self[self.index(startIndex, offsetBy: index)]
     }
     
-    public subscript(subRange:Range<Int>, `where` condition: @autoclosure () -> Bool) -> String {
+    @inlinable public subscript(subRange:Range<Int>, `where` condition: @autoclosure () -> Bool) -> String {
         return condition() ? self[subRange] : self
     }
-    public subscript(subRange:CountableClosedRange<Int>, `where` condition: @autoclosure () -> Bool) -> String {
+    @inlinable public subscript(subRange:CountableClosedRange<Int>, `where` condition: @autoclosure () -> Bool) -> String {
         return condition() ? self[subRange] : self
     }
-    public subscript(subRange:PartialRangeThrough<Int>, `where` condition: @autoclosure () -> Bool) -> String {
+    @inlinable public subscript(subRange:PartialRangeThrough<Int>, `where` condition: @autoclosure () -> Bool) -> String {
         return condition() ? self[subRange] : self
     }
-    public subscript(subRange:CountablePartialRangeFrom<Int>, `where` condition: @autoclosure () -> Bool) -> String {
+    @inlinable public subscript(subRange:CountablePartialRangeFrom<Int>, `where` condition: @autoclosure () -> Bool) -> String {
         return condition() ? self[subRange] : self
     }
     
-    public subscript(subRange:Range<Int>) -> String {
+    @inlinable public subscript(subRange:Range<Int>) -> String {
         let start = index(startIndex, offsetBy: subRange.lowerBound)
         let end = index(startIndex, offsetBy: subRange.upperBound)
         return String(self[start..<end])
     }
-    public subscript(subRange:CountableClosedRange<Int>) -> String {
+    @inlinable public subscript(subRange:CountableClosedRange<Int>) -> String {
         let start = index(startIndex, offsetBy: subRange.lowerBound)
         let end = index(startIndex, offsetBy: subRange.upperBound)
         return String(self[start...end])
     }
-    public subscript(subRange:PartialRangeThrough<Int>) -> String {
+    @inlinable public subscript(subRange:PartialRangeThrough<Int>) -> String {
         let end = index(startIndex, offsetBy: subRange.upperBound)
         return String(prefix(upTo: end))
     }
-    public subscript(subRange:CountablePartialRangeFrom<Int>) -> String {
+    @inlinable public subscript(subRange:CountablePartialRangeFrom<Int>) -> String {
         let start = index(startIndex, offsetBy: subRange.lowerBound)
         return String(suffix(from: start))
     }
     
-    public func substring(with range:Range<Int>) -> Substring {
+    @inlinable public func substring(with range:Range<Int>) -> Substring {
         let start = index(startIndex, offsetBy: range.lowerBound)
         let end = index(startIndex, offsetBy: range.upperBound)
         return self[start..<end]
     }
     
-    public func substring(with range:CountableClosedRange<Int>) -> Substring {
+    @inlinable public func substring(with range:CountableClosedRange<Int>) -> Substring {
         let start = index(startIndex, offsetBy: range.lowerBound)
         let end = index(startIndex, offsetBy: range.upperBound)
         return self[start...end]
     }
     
-    public func substring(with range:PartialRangeThrough<Int>) -> Substring {
+    @inlinable public func substring(with range:PartialRangeThrough<Int>) -> Substring {
         let end = index(startIndex, offsetBy: range.upperBound)
         return prefix(upTo: end)
     }
     
-    public func substring(with range:CountablePartialRangeFrom<Int>) -> Substring {
+    @inlinable public func substring(with range:CountablePartialRangeFrom<Int>) -> Substring {
         let start = index(startIndex, offsetBy: range.lowerBound)
         return suffix(from: start)
     }
     
-    public func prefix(upTo index:Int) -> Substring {
+    @inlinable public func prefix(upTo index:Int) -> Substring {
         let end = self.index(startIndex, offsetBy: index)
         return prefix(upTo: end)
     }
     
-    public func suffix(from index:Int) -> Substring {
+    @inlinable public func suffix(from index:Int) -> Substring {
         let start = self.index(startIndex, offsetBy: index)
         return suffix(from: start)
     }
     
-    public func deleting(last:Int) -> String {
+    @inlinable public func deleting(last:Int) -> String {
         let end = self.index(endIndex, offsetBy: -last)
         return end > startIndex ? String(prefix(upTo: end)) : ""
     }
     
-    public func deleting(suffix:String) -> String {
+    @inlinable public func deleting(suffix:String) -> String {
         if hasSuffix(suffix) {
             let end = self.index(endIndex, offsetBy: -suffix.length)
             return String(prefix(upTo: end))
@@ -180,68 +180,68 @@ extension String {
     }
     
     // MARK: - 字符串修改 RangeReplaceableCollectionType
-    public mutating func insert(_ newElement: Character, at i: Int) {
+    @inlinable public mutating func insert(_ newElement: Character, at i: Int) {
         insert(newElement, at: index(startIndex, offsetBy: i)) //advance(self.startIndex,i))
     }
     
-    public mutating func replaceSubrange(_ subRange: Range<Int>, with newValues: String) {
+    @inlinable public mutating func replaceSubrange(_ subRange: Range<Int>, with newValues: String) {
         let start = index(startIndex, offsetBy: subRange.lowerBound)
         let end = index(startIndex, offsetBy: subRange.upperBound)
         replaceSubrange(start..<end, with: newValues)
     }
-    public mutating func replaceSubrange(_ subRange: CountableClosedRange<Int>, with newValues: String) {
+    @inlinable public mutating func replaceSubrange(_ subRange: CountableClosedRange<Int>, with newValues: String) {
         let start = index(startIndex, offsetBy: subRange.lowerBound)
         let end = index(startIndex, offsetBy: subRange.upperBound)
         replaceSubrange(start...end, with: newValues)
     }
-    public mutating func replaceSubrange(_ subRange: PartialRangeThrough<Int>, with newValues: String) {
+    @inlinable public mutating func replaceSubrange(_ subRange: PartialRangeThrough<Int>, with newValues: String) {
         let end = index(startIndex, offsetBy: subRange.upperBound)
         replaceSubrange(...end, with: newValues)
     }
-    public mutating func replaceSubrange(_ subRange: CountablePartialRangeFrom<Int>, with newValues: String) {
+    @inlinable public mutating func replaceSubrange(_ subRange: CountablePartialRangeFrom<Int>, with newValues: String) {
         let start = index(startIndex, offsetBy: subRange.lowerBound)
         replaceSubrange(start..., with: newValues)
     }
     
-    public mutating func remove(at i: Int) -> Character {
+    @inlinable public mutating func remove(at i: Int) -> Character {
         return remove(at: index(startIndex, offsetBy: i)) //advance(self.startIndex,i))
     }
     
-    public mutating func removeRange(_ subRange: Range<Int>) {
+    @inlinable public mutating func removeRange(_ subRange: Range<Int>) {
         let start = index(startIndex, offsetBy: subRange.lowerBound)
         let end = index(startIndex, offsetBy: subRange.upperBound)
         removeSubrange(start..<end)
     }
-    public mutating func removeRange(_ subRange: CountableClosedRange<Int>) {
+    @inlinable public mutating func removeRange(_ subRange: CountableClosedRange<Int>) {
         let start = index(startIndex, offsetBy: subRange.lowerBound)
         let end = index(startIndex, offsetBy: subRange.upperBound)
         removeSubrange(start...end)
     }
-    public mutating func removeRange(_ subRange: PartialRangeThrough<Int>) {
+    @inlinable public mutating func removeRange(_ subRange: PartialRangeThrough<Int>) {
         let end = index(startIndex, offsetBy: subRange.upperBound)
         removeSubrange(...end)
     }
-    public mutating func removeRange(_ subRange: CountablePartialRangeFrom<Int>) {
+    @inlinable public mutating func removeRange(_ subRange: CountablePartialRangeFrom<Int>) {
         let start = index(startIndex, offsetBy: subRange.lowerBound)
         removeSubrange(start...)
     }
     // MARK: - 字符串拆分
-    public func split(byString separator: String) -> [String] {
+    @inlinable public func split(byString separator: String) -> [String] {
         return components(separatedBy: separator)
     }
-    public func split(byCharacters separators: String) -> [String] {
+    @inlinable public func split(byCharacters separators: String) -> [String] {
         return components(separatedBy: CharacterSet(charactersIn: separators))
     }
     
     // MARK: - URL解码/编码
     
     /// 给URL解编码
-    public func decodeURL() -> String {
+    @inlinable public func decodeURL() -> String {
         return removingPercentEncoding ?? self
     }
     
     /// 给URL编码
-    public func encodeURL(allowedCharactersIn text: AllowedURLEncodeCharacters = .normal) -> String {
+    @inlinable public func encodeURL(allowedCharactersIn text: AllowedURLEncodeCharacters = .normal) -> String {
 //        let originalString:CFString = self as NSString
 //        let charactersToBeEscaped = "!*'();:@&=+$,/?%#." as CFString  //":/?&=;+!@#$()',*"    //转意符号
 //        //let charactersToLeaveUnescaped = "[]." as CFStringRef  //保留的符号
@@ -268,7 +268,7 @@ extension AllowedURLEncodeCharacters {
 }
 
 extension String.UnicodeScalarView {
-    public subscript (i: Int) -> UnicodeScalar {
+    @inlinable public subscript (i: Int) -> UnicodeScalar {
         return self[index(startIndex, offsetBy: i)] //advance(self.startIndex, i)]
     }
 }
@@ -321,25 +321,25 @@ extension String {
         return self[start..<end]
     }
     
-    public func joinIn(_ prefix:String, _ suffix:String) -> String {
+    @inlinable public func joinIn(_ prefix:String, _ suffix:String) -> String {
         return "\(prefix)\(self)\(suffix)"
     }
     
-    public var isNumeric:Bool {
+    @inlinable public var isNumeric:Bool {
         return matchRegular(try! NSRegularExpression(pattern: "[0-9]+\\.?[0-9]*", options: .caseInsensitive))
     }
     
-    public var isInteger:Bool {
+    @inlinable public var isInteger:Bool {
         return matchRegular(try! NSRegularExpression(pattern: "[0-9]+", options: .caseInsensitive))
     }
     
-    public func matchRegular(_ regular:NSRegularExpression) -> Bool {
+    @inlinable public func matchRegular(_ regular:NSRegularExpression) -> Bool {
         let length = distance(from: startIndex, to: endIndex) //characters.count
         let range = regular.rangeOfFirstMatch(in: self, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSMakeRange(0, length))
         return range.location == 0 && range.length == length
     }
     
-    public var utf8Data:Data {
+    @inlinable public var utf8Data:Data {
         return self.data(using: .utf8) ?? Data()
     }
 }

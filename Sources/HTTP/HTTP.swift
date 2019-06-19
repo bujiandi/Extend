@@ -87,7 +87,7 @@ public struct HTTP {
         var _progress:Progress = Progress(totalUnitCount: 0)
         
         var _state:State = .waiting
-        var _states:[WeakContainer<Store<State>>] = []
+        var _states:[WeakContainer<Storage<State>>] = []
         var _overlays:[WeakOverlay] = []
         weak var _retryOverlay:HTTPFailureRetryOverlay? = nil
         weak var _client:Client? = nil

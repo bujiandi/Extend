@@ -2,7 +2,7 @@
 //  Store.swift
 //  Basic
 //
-//  Created by 慧趣小歪 on 2018/11/24.
+//  Created by bujiandi on 2018/11/24.
 //
 
 
@@ -15,7 +15,7 @@ import Foundation
 //infix operator <=> : AssignmentPrecedence
 
 /// 数据监听器
-public final class Store<T> {
+public final class Storage<T> {
     
 //    @inlinable public static func <=><T>(lhs:Store<T>, rhs:Store<T>) {
 //        bind(lhs, rhs)
@@ -25,14 +25,14 @@ public final class Store<T> {
 //        lhs.subscribe(rhs)
 //    }
     
-    public func subscribe(_ store:Store<T>) {
+    public func subscribe(_ store:Storage<T>) {
         binders.append(WeakContainer(store))
         store.binders.append(WeakContainer(self))
         setValue(store.value)
     }
     
     private var observers : [Observer<T>] = []
-    private var binders: [WeakContainer<Store<T>>] = []
+    private var binders: [WeakContainer<Storage<T>>] = []
     
     public func notifyChanged() {
         setValue(_value)
@@ -86,7 +86,7 @@ public final class Store<T> {
     
     public init(_ v : T) { _value = v }
     
-    public func syncObservers(from store:Store<T>) {
+    public func syncObservers(from store:Storage<T>) {
         observers = store.observers
     }
     
@@ -101,11 +101,11 @@ public final class Store<T> {
     }
     
     @discardableResult
-    public func addObserver<This:AnyObject>(_ target: This, change: @escaping (ObservedChange<Handler<This, T>, T>) -> Void) -> Notice<T> {
+    public func addObserver<This:AnyObject>(_ target: This, change: @escaping (Observed<Handler<This, T>, T>) -> Void) -> Notice<T> {
         let observer = Observer<T>(target) {
             [unowned target, unowned self] (new, old) in
             let handler = Handler(target, &self._value, old)
-            change(ObservedChange<Handler<This, T>, T>(handler, new, old))
+            change(Observed<Handler<This, T>, T>(valueFrom: old, to: new, tell:  handler))
         }
         observers.append(observer)
         return Notice<T>(self, observer)
@@ -120,7 +120,7 @@ public final class Store<T> {
     
 }
 
-extension Store {
+extension Storage {
     
     fileprivate struct Observer<Value> {
         
@@ -165,10 +165,10 @@ extension Store {
     
     public struct Notice<T> {
         
-        fileprivate let store : Store<T>
+        fileprivate let store : Storage<T>
         fileprivate let observer : Observer<T>
         
-        fileprivate init(_ listener:Store<T>, _ observer:Observer<T>) {
+        fileprivate init(_ listener:Storage<T>, _ observer:Observer<T>) {
             self.store = listener
             self.observer = observer
         }
@@ -182,49 +182,49 @@ extension Store {
     
 }
 
-extension Store {
+extension Storage {
     
-    @inlinable public static postfix func & <T>(store:Store<T>) -> T {
+    @inlinable public static postfix func & <T>(store:Storage<T>) -> T {
         return store.value
     }
     
 }
 
-extension Store {
+extension Storage {
     
-    @inlinable public static func <- (lhs: Store<T>, rhs: T) {
+    @inlinable public static func <- (lhs: Storage<T>, rhs: T) {
         lhs.value = rhs
     }
     
-    @inlinable public static func <-? (lhs: Store<T>, rhs: T?) {
+    @inlinable public static func <-? (lhs: Storage<T>, rhs: T?) {
         if let value = rhs {
             lhs.value = value
         }
     }
 }
 
-extension Store : CustomStringConvertible where T : CustomStringConvertible {
+extension Storage : CustomStringConvertible where T : CustomStringConvertible {
     @inlinable public var description: String { return value.description }
 }
 
 
-extension Store : CustomDebugStringConvertible where T : CustomDebugStringConvertible {
+extension Storage : CustomDebugStringConvertible where T : CustomDebugStringConvertible {
     @inlinable public var debugDescription: String { return value.debugDescription }
 }
 
-extension Store : Costable where T : Costable {
+extension Storage : Costable where T : Costable {
     
     @inlinable public var cost: Int { return value.cost }
     
 }
 
-extension Store where T == String {
+extension Storage where T == String {
     
     @inlinable public func append(_ other: String) {
         value.append(other)
     }
     
-    @inlinable public static func += (lhs: inout Store<String>, rhs: String) {
+    @inlinable public static func += (lhs: inout Storage<String>, rhs: String) {
         lhs.value += rhs
     }
     
@@ -251,7 +251,7 @@ extension Store where T == String {
 }
 
 
-extension Store where T == Bool {
+extension Storage where T == Bool {
     
     @inlinable public func toggle() {
         value.toggle()
@@ -259,35 +259,35 @@ extension Store where T == Bool {
     
 }
 
-extension Store : Comparable where T : Comparable {
+extension Storage : Comparable where T : Comparable {
     
-    @inlinable public static func < (lhs: Store<T>, rhs: Store<T>) -> Bool {
+    @inlinable public static func < (lhs: Storage<T>, rhs: Storage<T>) -> Bool {
         return lhs.value < rhs.value
     }
     
-    @inlinable public static func <= (lhs: Store<T>, rhs: Store<T>) -> Bool {
+    @inlinable public static func <= (lhs: Storage<T>, rhs: Storage<T>) -> Bool {
         return lhs.value <= rhs.value
     }
     
-    @inlinable public static func >= (lhs: Store<T>, rhs: Store<T>) -> Bool {
+    @inlinable public static func >= (lhs: Storage<T>, rhs: Storage<T>) -> Bool {
         return lhs.value >= rhs.value
     }
     
-    @inlinable public static func > (lhs: Store<T>, rhs: Store<T>) -> Bool {
+    @inlinable public static func > (lhs: Storage<T>, rhs: Storage<T>) -> Bool {
         return lhs.value > rhs.value
     }
     
 }
 
-extension Store : Equatable where T : Equatable {
+extension Storage : Equatable where T : Equatable {
     
-    @inlinable public static func == (lhs: Store<T>, rhs: Store<T>) -> Bool {
+    @inlinable public static func == (lhs: Storage<T>, rhs: Storage<T>) -> Bool {
         return lhs.value == rhs.value
     }
     
 }
 
-extension Store : Hashable where T : Hashable {
+extension Storage : Hashable where T : Hashable {
     
     public var hashValue: Int { return value.hashValue }
     
@@ -297,7 +297,7 @@ extension Store : Hashable where T : Hashable {
 
 }
 
-extension Store : Encodable where T : Encodable {
+extension Storage : Encodable where T : Encodable {
     
     @inlinable public func encode(to encoder: Encoder) throws {
         try value.encode(to: encoder)
@@ -305,7 +305,7 @@ extension Store : Encodable where T : Encodable {
 
 }
 
-extension Store : Decodable where T : Decodable {
+extension Storage : Decodable where T : Decodable {
     
     @inlinable public convenience init(from decoder: Decoder) throws {
         self.init(try T(from: decoder))
@@ -315,7 +315,7 @@ extension Store : Decodable where T : Decodable {
 
 
 
-extension Store : RawRepresentable where T : RawRepresentable {
+extension Storage : RawRepresentable where T : RawRepresentable {
     
     public typealias RawValue = T.RawValue
     
@@ -330,7 +330,7 @@ extension Store : RawRepresentable where T : RawRepresentable {
     public var rawValue: T.RawValue { return value.rawValue }
 }
 
-extension Store : ExpressibleByNilLiteral where T : ExpressibleByNilLiteral {
+extension Storage : ExpressibleByNilLiteral where T : ExpressibleByNilLiteral {
     
     @inlinable public convenience init(nilLiteral: ()) {
         self.init(nil)
@@ -338,7 +338,7 @@ extension Store : ExpressibleByNilLiteral where T : ExpressibleByNilLiteral {
     
 }
 
-extension Store : ExpressibleByFloatLiteral where T : ExpressibleByFloatLiteral {
+extension Storage : ExpressibleByFloatLiteral where T : ExpressibleByFloatLiteral {
     
     public typealias FloatLiteralType = T.FloatLiteralType
     
@@ -347,7 +347,7 @@ extension Store : ExpressibleByFloatLiteral where T : ExpressibleByFloatLiteral 
     }
 }
 
-extension Store : ExpressibleByIntegerLiteral where T : ExpressibleByIntegerLiteral {
+extension Storage : ExpressibleByIntegerLiteral where T : ExpressibleByIntegerLiteral {
     
     public typealias IntegerLiteralType = T.IntegerLiteralType
     
@@ -356,7 +356,7 @@ extension Store : ExpressibleByIntegerLiteral where T : ExpressibleByIntegerLite
     }
 }
 
-extension Store : ExpressibleByBooleanLiteral where T : ExpressibleByBooleanLiteral {
+extension Storage : ExpressibleByBooleanLiteral where T : ExpressibleByBooleanLiteral {
     
     public typealias BooleanLiteralType = T.BooleanLiteralType
     
@@ -365,7 +365,7 @@ extension Store : ExpressibleByBooleanLiteral where T : ExpressibleByBooleanLite
     }
 }
 
-extension Store : ExpressibleByUnicodeScalarLiteral where T : ExpressibleByUnicodeScalarLiteral {
+extension Storage : ExpressibleByUnicodeScalarLiteral where T : ExpressibleByUnicodeScalarLiteral {
     
     public typealias UnicodeScalarLiteralType = T.UnicodeScalarLiteralType
     
@@ -375,7 +375,7 @@ extension Store : ExpressibleByUnicodeScalarLiteral where T : ExpressibleByUnico
     
 }
 
-extension Store : ExpressibleByExtendedGraphemeClusterLiteral where T : ExpressibleByExtendedGraphemeClusterLiteral {
+extension Storage : ExpressibleByExtendedGraphemeClusterLiteral where T : ExpressibleByExtendedGraphemeClusterLiteral {
     
     public typealias ExtendedGraphemeClusterLiteralType = T.ExtendedGraphemeClusterLiteralType
     
@@ -384,7 +384,7 @@ extension Store : ExpressibleByExtendedGraphemeClusterLiteral where T : Expressi
     }
     
 }
-extension Store : ExpressibleByStringLiteral where T : ExpressibleByStringLiteral {
+extension Storage : ExpressibleByStringLiteral where T : ExpressibleByStringLiteral {
     
     public typealias StringLiteralType = T.StringLiteralType
     
@@ -394,7 +394,7 @@ extension Store : ExpressibleByStringLiteral where T : ExpressibleByStringLitera
     
 }
 
-extension Store : ExpressibleByArrayLiteral where T : ExpressibleByArrayLiteral, T : RangeReplaceableCollection, T.ArrayLiteralElement == T.Element {
+extension Storage : ExpressibleByArrayLiteral where T : ExpressibleByArrayLiteral, T : RangeReplaceableCollection, T.ArrayLiteralElement == T.Element {
     
     public typealias ArrayLiteralElement = T.ArrayLiteralElement
     
@@ -406,7 +406,7 @@ extension Store : ExpressibleByArrayLiteral where T : ExpressibleByArrayLiteral,
 }
 
 
-extension Store : RangeExpression where T : RangeExpression {
+extension Storage : RangeExpression where T : RangeExpression {
     
     public typealias Bound = T.Bound
     
@@ -420,7 +420,7 @@ extension Store : RangeExpression where T : RangeExpression {
 
 }
 
-extension Store : IteratorProtocol where T : IteratorProtocol {
+extension Storage : IteratorProtocol where T : IteratorProtocol {
     
     public func next() -> T.Element? {
         return value.next()
@@ -428,7 +428,7 @@ extension Store : IteratorProtocol where T : IteratorProtocol {
     
 }
 
-extension Store : Sequence where T : Sequence {
+extension Storage : Sequence where T : Sequence {
     
     public typealias Element = T.Element
     
@@ -490,7 +490,7 @@ extension Store : Sequence where T : Sequence {
 }
 
 
-extension Store : Collection where T : Collection {
+extension Storage : Collection where T : Collection {
     
     public typealias Index = T.Index
     
@@ -544,7 +544,7 @@ extension Store : Collection where T : Collection {
     
 }
 
-extension Store : MutableCollection where T : MutableCollection {
+extension Storage : MutableCollection where T : MutableCollection {
     
     @inlinable public subscript(position: T.Index) -> T.Element {
         get { return value[position] }
@@ -565,7 +565,7 @@ extension Store : MutableCollection where T : MutableCollection {
     }
 }
 
-extension Store : RangeReplaceableCollection where T : RangeReplaceableCollection {
+extension Storage : RangeReplaceableCollection where T : RangeReplaceableCollection {
     
     @inlinable public convenience init() {
         self.init(T())
