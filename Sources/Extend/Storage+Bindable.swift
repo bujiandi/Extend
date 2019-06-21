@@ -25,7 +25,7 @@ extension Bindable {
     public func bind<Data>(_ store:Storage<Data>, onChange: @escaping (Observed<Self, Data>) -> Void) -> Storage<Data>.Notice<Data> {
         return store.addObserver(self) { [weak self] in
             if let this = self {
-                onChange(Observed(valueFrom: $0.old, to: $0.new, tell: this))
+                onChange(Observed(valueFrom: $0.old, to: $0.new, notify: this))
             }
         }
     }

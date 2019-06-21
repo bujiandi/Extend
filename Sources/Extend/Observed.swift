@@ -13,13 +13,13 @@ public struct Observed<This, Value> where This : AnyObject {
     public let new:Value
     public  unowned let this:This
     
-    public init(valueFrom oldValue:Value, to newValue:Value, tell target:This) {
+    public init(valueFrom oldValue:Value, to newValue:Value, notify target:This) {
         old = oldValue
         new = newValue
         this = target
     }
     
-    public init(setValue newValue:Value, tell target:This) {
+    public init(setValue newValue:Value, notify target:This) {
         old = newValue
         new = newValue
         this = target

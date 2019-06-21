@@ -11,16 +11,16 @@ fileprivate struct Observer<Value> {
     
     weak var target:AnyObject?
     
-    private let tell:(Value, Value) -> Void
+    private let notify:(Value, Value) -> Void
     
     init(tellTarget: AnyObject, _ onChange:@escaping (Value, Value) -> Void) {
         target = tellTarget
-        tell = onChange
+        notify = onChange
     }
     
     func declare(from oldValue:Value, to newValue:Value) -> Bool {
         if target != nil {
-            tell(oldValue, newValue)
+            notify(oldValue, newValue)
             return true
         }
         return false
@@ -163,7 +163,7 @@ extension Observable {
             didChange(Observed<T, Value>(
                 valueFrom: oldValue,
                 to: newValue,
-                tell: target)
+                notify: target)
             )
         }
 //        observers = observers.filter { $0.target != nil }
@@ -177,7 +177,7 @@ extension Observable {
             _ = obj.perform(action, with: Observed<T, Value>(
                 valueFrom: oldValue,
                 to: newValue,
-                tell: target)
+                notify: target)
             )//?.release()
         }
     }

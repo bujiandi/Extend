@@ -105,7 +105,7 @@ public final class Storage<T> {
         let observer = Observer<T>(target) {
             [unowned target, unowned self] (new, old) in
             let handler = Handler(target, &self._value, old)
-            change(Observed<Handler<This, T>, T>(valueFrom: old, to: new, tell:  handler))
+            change(Observed<Handler<This, T>, T>(valueFrom: old, to: new, notify: handler))
         }
         observers.append(observer)
         return Notice<T>(self, observer)
