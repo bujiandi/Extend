@@ -17,11 +17,11 @@ import Foundation
 /// 数据监听器
 public final class Storage<T> {
     
-//    @inlinable public static func <=><T>(lhs:Store<T>, rhs:Store<T>) {
+//    @inlinable public static func <=><T>(lhs:Observable<T>, rhs:Observable<T>) {
 //        bind(lhs, rhs)
 //    }
 //    
-//    @inlinable public static func bind<T>(_ lhs:Store<T>, _ rhs:Store<T>) {
+//    @inlinable public static func bind<T>(_ lhs:Observable<T>, _ rhs:Observable<T>) {
 //        lhs.subscribe(rhs)
 //    }
     

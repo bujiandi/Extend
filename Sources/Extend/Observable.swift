@@ -5,6 +5,8 @@
 //  Created by bujiandi on 2019/6/18.
 //
 
+import Operator
+
 fileprivate struct Observer<Value> {
     
     weak var target:AnyObject?
@@ -34,6 +36,7 @@ public struct Observable<Value> {
     
     private let getValue: () -> Value
     private let setValue: (Value) -> Void
+    private let clearObserver: () -> Void
     private let appendObserver: (AnyObject, @escaping ValueChange) -> Void
     private let publishValueChange:(Value, Value) -> Void
     
@@ -85,6 +88,7 @@ public struct Observable<Value> {
 
     private let getValue: () -> Value
     private let setValue: (Value) -> Void
+    private let clearObserver: () -> Void
     private let appendObserver: (AnyObject, @escaping ValueChange) -> Void
     private let publishValueChange: (Value, Value) -> Void
     
@@ -114,6 +118,7 @@ public struct Observable<Value> {
         publishValueChange = { oldValue, newValue in
             observers = observers.filter { $0.declare(from: oldValue, to: newValue) }
         }
+        clearObserver = { observers.removeAll() }
     }
     
     /// Initializes from functions to read and write the value.
@@ -128,11 +133,16 @@ public struct Observable<Value> {
         
         self.appendObserver = appendObserver
         self.publishValueChange = publishValueChange
+        self.clearObserver = { }
     }
 }
 #endif
 
 extension Observable {
+    
+    public func clearObservers() {
+        clearObserver()
+    }
     
     /// Initializes from initial value storage it and storage observers.
     public init(_ value: Value) {
@@ -216,7 +226,7 @@ extension Observable {
                     .filter { $0.declare(from: oldValue, to: newValue) }
             }
         }
-        
+        clearObserver = { observers.removeAll() }
     }
     
     /// Creates an instance by projecting the base optional value to its
@@ -235,6 +245,7 @@ extension Observable {
             }
         }
         publishValueChange = base.publishValueChange
+        clearObserver = { base.clearObserver() }
     }
     
 //    public init<V>(_ base: Observable<V>) where V : Hashable {
@@ -284,8 +295,17 @@ extension Observable where Value : SetAlgebra, Value.Element : Hashable {
     }
 }
 
-extension Observable where Value : RawRepresentable {
+extension Observable: RawRepresentable where Value : RawRepresentable {
     
+    public typealias RawValue = Observable<Value.RawValue>
+    
+    @inlinable public init?(rawValue: Observable<Value.RawValue>) {
+        if let value = Value(rawValue: rawValue.value) {
+            self.init(value)
+        } else {
+            return nil
+        }
+    }
     /// Returns the projection of the receiver's value to its `rawValue`.
     public var rawValue: Observable<Value.RawValue> {
         return Observable<Value.RawValue>.constant(storage.value.rawValue)
@@ -592,4 +612,220 @@ extension ObservableConvertible {
             }
         )
     }
+}
+
+
+
+extension Observable {
+    
+    @inlinable public static func <- (lhs: Observable<Value>, rhs: Value) {
+        lhs.value = rhs
+    }
+    
+    @inlinable public static func <-? (lhs: Observable<Value>, rhs: Value?) {
+        if let value = rhs {
+            lhs.value = value
+        }
+    }
+}
+
+extension Observable : CustomStringConvertible where Value : CustomStringConvertible {
+    @inlinable public var description: String { return value.description }
+}
+
+
+extension Observable : CustomDebugStringConvertible where Value : CustomDebugStringConvertible {
+    @inlinable public var debugDescription: String { return value.debugDescription }
+}
+
+extension Observable : Costable where Value : Costable {
+    
+    @inlinable public var cost: Int { return value.cost }
+    
+}
+
+extension Observable where Value == String {
+    
+    @inlinable public func append(_ other: String) {
+        value.append(other)
+    }
+    
+    @inlinable public static func += (lhs: inout Observable<String>, rhs: String) {
+        lhs.value += rhs
+    }
+    
+    @inlinable public func lowercased() -> String {
+        return value.lowercased()
+    }
+    
+    @inlinable public func uppercased() -> String {
+        return value.uppercased()
+    }
+    
+    @inlinable public var isEmpty: Bool { return value.isEmpty }
+    
+    @inlinable public var length: Int { return value.length }
+    
+    @inlinable public func hasPrefix(_ prefix: String) -> Bool {
+        return value.hasPrefix(prefix)
+    }
+    
+    @inlinable public func hasSuffix(_ suffix: String) -> Bool {
+        return value.hasSuffix(suffix)
+    }
+    
+}
+
+
+extension Observable where Value == Bool {
+    
+    @inlinable public func toggle() {
+        value.toggle()
+    }
+    
+}
+
+extension Observable : Comparable where Value : Comparable {
+    
+    @inlinable public static func < (lhs: Observable<Value>, rhs: Observable<Value>) -> Bool {
+        return lhs.value < rhs.value
+    }
+    
+    @inlinable public static func <= (lhs: Observable<Value>, rhs: Observable<Value>) -> Bool {
+        return lhs.value <= rhs.value
+    }
+    
+    @inlinable public static func >= (lhs: Observable<Value>, rhs: Observable<Value>) -> Bool {
+        return lhs.value >= rhs.value
+    }
+    
+    @inlinable public static func > (lhs: Observable<Value>, rhs: Observable<Value>) -> Bool {
+        return lhs.value > rhs.value
+    }
+    
+}
+
+extension Observable : Equatable where Value : Equatable {
+    
+    @inlinable public static func == (lhs: Observable<Value>, rhs: Observable<Value>) -> Bool {
+        return lhs.value == rhs.value
+    }
+    
+}
+
+extension Observable : Hashable where Value : Hashable {
+    
+    public var hashValue: Int { return value.hashValue }
+    
+    public func hash(into hasher: inout Hasher) {
+        value.hash(into: &hasher)
+    }
+    
+}
+
+extension Observable : Encodable where Value : Encodable {
+    
+    @inlinable public func encode(to encoder: Encoder) throws {
+        try value.encode(to: encoder)
+    }
+    
+}
+
+extension Observable : Decodable where Value : Decodable {
+    
+    @inlinable public init(from decoder: Decoder) throws {
+        self.init(try Value(from: decoder))
+    }
+    
+}
+
+
+extension Observable : ExpressibleByNilLiteral where Value : ExpressibleByNilLiteral {
+    
+    @inlinable public init(nilLiteral: ()) {
+        self.init(Value(nilLiteral: ()))
+    }
+    
+}
+
+extension Observable : ExpressibleByFloatLiteral where Value : ExpressibleByFloatLiteral {
+    
+    public typealias FloatLiteralType = Value.FloatLiteralType
+    
+    @inlinable public init(floatLiteral value: Value.FloatLiteralType) {
+        self.init(Value(floatLiteral: value))
+    }
+}
+
+extension Observable : ExpressibleByIntegerLiteral where Value : ExpressibleByIntegerLiteral {
+    
+    public typealias IntegerLiteralType = Value.IntegerLiteralType
+    
+    @inlinable public init(integerLiteral value: Value.IntegerLiteralType) {
+        self.init(Value(integerLiteral: value))
+    }
+}
+
+extension Observable : ExpressibleByBooleanLiteral where Value : ExpressibleByBooleanLiteral {
+    
+    public typealias BooleanLiteralType = Value.BooleanLiteralType
+    
+    @inlinable public init(booleanLiteral value: Value.BooleanLiteralType) {
+        self.init(Value(booleanLiteral: value))
+    }
+}
+
+extension Observable : ExpressibleByUnicodeScalarLiteral where Value : ExpressibleByUnicodeScalarLiteral {
+    
+    public typealias UnicodeScalarLiteralType = Value.UnicodeScalarLiteralType
+    
+    @inlinable public init(unicodeScalarLiteral value: Value.UnicodeScalarLiteralType) {
+        self.init(Value(unicodeScalarLiteral: value))
+    }
+    
+}
+
+extension Observable : ExpressibleByExtendedGraphemeClusterLiteral where Value : ExpressibleByExtendedGraphemeClusterLiteral {
+    
+    public typealias ExtendedGraphemeClusterLiteralType = Value.ExtendedGraphemeClusterLiteralType
+    
+    @inlinable public init(extendedGraphemeClusterLiteral value: Value.ExtendedGraphemeClusterLiteralType) {
+        self.init(Value(extendedGraphemeClusterLiteral: value))
+    }
+    
+}
+extension Observable : ExpressibleByStringLiteral where Value : ExpressibleByStringLiteral {
+    
+    public typealias StringLiteralType = Value.StringLiteralType
+    
+    @inlinable public init(stringLiteral value: Value.StringLiteralType) {
+        self.init(Value(stringLiteral: value))
+    }
+    
+}
+
+extension Observable : ExpressibleByArrayLiteral where Value : ExpressibleByArrayLiteral, Value : RangeReplaceableCollection, Value.ArrayLiteralElement == Value.Element {
+    
+    public typealias ArrayLiteralElement = Value.ArrayLiteralElement
+    
+    /// Creates an instance initialized with the given elements.
+    @inlinable public init(arrayLiteral elements: Value.ArrayLiteralElement...) {
+        self.init(Value(elements))
+    }
+    
+}
+
+
+extension Observable : RangeExpression where Value : RangeExpression {
+    
+    public typealias Bound = Value.Bound
+    
+    @inlinable public func relative<C>(to collection: C) -> Range<Value.Bound> where C : Collection, Value.Bound == C.Index {
+        return value.relative(to: collection)
+    }
+    
+    @inlinable public func contains(_ element: Value.Bound) -> Bool {
+        return value.contains(element)
+    }
+    
 }
