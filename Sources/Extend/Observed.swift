@@ -11,7 +11,7 @@ public struct Observed<This, Value> where This : AnyObject {
     
     public let old:Value
     public let new:Value
-    public  unowned let this:This
+    public unowned(safe) let this:This
     
     public init(valueFrom oldValue:Value, to newValue:Value, notify target:This) {
         old = oldValue

@@ -19,3 +19,13 @@ extension ArraySlice : Emptiable {}
 
 extension ContiguousArray : Emptiable {}
 
+extension Emptiable {
+    
+    @inlinable public func ifEmpty(_ transform: @autoclosure () -> Self) -> Self {
+        return ifEmpty(transform)
+    }
+    
+    @inlinable func ifEmpty(_ transform:() -> Self) -> Self {
+        return isEmpty ? transform() : self
+    }
+}

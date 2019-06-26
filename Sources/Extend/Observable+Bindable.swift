@@ -27,6 +27,23 @@ public struct BindingProperty<Object: AnyObject, Value> {
     }
 }
 
+#if swift(>=5.1)
+
+@dynamicMemberLookup public protocol BindedProperty: class {
+    
+    subscript<Subject>(dynamicMember keyPath: WritableKeyPath<Self, Subject>) -> BindingProperty<Self, Subject> { get }
+
+}
+
+extension BindedProperty {
+
+    public subscript<Subject>(dynamicMember keyPath: WritableKeyPath<Self, Subject>) -> BindingProperty<Self, Subject> {
+        return BindingProperty<Self, Subject>(self, keyPath: keyPath)
+    }
+}
+
+#endif
+
 extension Bindable {
     
     @inlinable public subscript<Subject>(keyPath: WritableKeyPath<Self, Subject>) -> BindingProperty<Self, Subject> {
@@ -34,6 +51,16 @@ extension Bindable {
     }
     
 }
+
+//@inlinable public func <=><O,V>(lhs:BindingProperty<O,V>, rhs:Observable<V>) {
+//    let setProperty:(V) -> Void = lhs.setProperty
+//    rhs.notify(lhs.obj) { setProperty($0.new) }
+//}
+//
+//@inlinable public func <=><O,V>(lhs:BindingProperty<O,V?>, rhs:Observable<V>) {
+//    let setProperty:(V?) -> Void = lhs.setProperty
+//    rhs.notify(lhs.obj) { setProperty($0.new) }
+//}
 
 @inlinable public func <-<O,V>(lhs:BindingProperty<O,V>, rhs:Observable<V>) {
     let setProperty:(V) -> Void = lhs.setProperty

@@ -277,6 +277,22 @@ extension String.UnicodeScalarView {
 /// trim 去掉字符串两段的换行与空格
 extension String {
     
+    @inlinable public func ifBlank(_ transform: @autoclosure () -> String) -> String {
+        return ifBlank(transform)
+    }
+    
+    @inlinable public func ifBlank(_ transform:() -> String) -> String {
+        for char:Character in self {
+            switch char {
+            case " ", "\n", "\r", "\r\n", "\t":   // \r\n 是一个字符  \n\r 是2个字符
+                continue
+            default:
+                return self
+            }
+        }
+        return transform()
+    }
+    
     public struct TrimMode: OptionSet, ExpressibleByIntegerLiteral {
         public typealias IntegerLiteralType = Int
         

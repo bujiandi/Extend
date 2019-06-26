@@ -8,6 +8,31 @@
 import Operator
 import Foundation
 
+/*
+infix /* 中置 */ operator <=> : AssignmentPrecedence
+
+
+@inlinable public func <=><O>(lhs:BindingProperty<O,String?>, rhs:@autoclosure () -> ObservableString) {
+    let setProperty:(String) -> Void = lhs.setProperty
+    let txt = rhs()
+    for comment in txt.comments {
+        if case .observable(let delegate) = comment {
+            delegate.notify(lhs.obj) { setProperty(txt.description) }
+        }
+    }
+}
+
+@inlinable public func <=><O>(lhs:BindingProperty<O,String>, rhs: @autoclosure () -> ObservableString) {
+    let setProperty:(String) -> Void = lhs.setProperty
+    let txt = rhs()
+    for comment in txt.comments {
+        if case .observable(let delegate) = comment {
+            delegate.notify(lhs.obj) { setProperty(txt.description) }
+        }
+    }
+}
+ */
+
 @inlinable public func <-<O>(lhs:BindingProperty<O,String?>, rhs:@autoclosure () -> ObservableString) {
     let setProperty:(String) -> Void = lhs.setProperty
     let txt = rhs()

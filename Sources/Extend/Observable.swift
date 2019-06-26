@@ -28,7 +28,7 @@ fileprivate struct Observer<Value> {
 }
 
 #if swift(>=5.1)
-@propertyDelegate
+@propertyWrapper
 @dynamicMemberLookup
 public struct Observable<Value> {
     
@@ -66,6 +66,7 @@ public struct Observable<Value> {
         publishValueChange = { oldValue, newValue in
             observers = observers.filter { $0.declare(from: oldValue, to: newValue) }
         }
+        clearObserver = { observers.removeAll() }
     }
     /// Initializes from functions to read and write the value.
     public init(
@@ -79,6 +80,7 @@ public struct Observable<Value> {
         
         self.appendObserver = appendObserver
         self.publishValueChange = publishValueChange
+        clearObserver = { }
     }
 }
 #else
