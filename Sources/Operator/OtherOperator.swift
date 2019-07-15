@@ -16,8 +16,11 @@ precedencegroup NilWrapPrecedence {
     lowerThan: LogicalConjunctionPrecedence
 }
 /// 可选赋值运算符 有则赋值, 没有忽略
-infix operator ??? : NilWrapPrecedence
 infix operator =? : AssignmentPrecedence
+/// 非等赋值运算符 内容不相同才赋值
+infix operator =! : AssignmentPrecedence
+/// 空条件可选
+infix operator ??? : NilWrapPrecedence
 
 @inlinable public func ??(lhs:Bool, rhs: @autoclosure () -> Void) {
     if lhs { rhs() }
@@ -43,6 +46,16 @@ infix operator =? : AssignmentPrecedence
 /// 可选赋值运算符 有则赋值, 没有忽略
 @inlinable public func =?<T>(lhs: inout T?, rhs: T?) {
     if let v = rhs { lhs = v }
+}
+
+/// 不等赋值运算符 内容不相同才赋值
+@inlinable public func =!<T:Equatable>(lhs: inout T?, rhs: T) {
+    if lhs != rhs { lhs = rhs }
+}
+
+/// 不等赋值运算符 内容不相同才赋值
+@inlinable public func =!<T:Equatable>(lhs: inout T, rhs: T) {
+    if lhs != rhs { lhs = rhs }
 }
 
 /// 可选值相乘
