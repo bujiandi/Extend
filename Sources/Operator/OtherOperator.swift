@@ -30,14 +30,6 @@ infix operator ??? : NilWrapPrecedence
     return lhs ? rhs() : nil
 }
 
-@inlinable public func ???<T>(lhs: @autoclosure () -> T?, rhs: Bool) -> T? {
-    return rhs ? lhs() : nil
-}
-
-@inlinable public func ???<T>(lhs: @autoclosure () -> T, rhs: Bool) -> T? {
-    return rhs ? lhs() : nil
-}
-
 /// 可选赋值运算符 有则赋值, 没有忽略
 @inlinable public func =?<T>(lhs: inout T, rhs: T?) {
     if let v = rhs { lhs = v }
