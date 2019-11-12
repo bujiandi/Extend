@@ -53,9 +53,9 @@ public struct Observable<Value> {
         }
     }
     
-    @inlinable public var wrapperValue: Value {
+    @inlinable public var wrappedValue: Value {
         get { return value }
-        set { value = newValue }
+        nonmutating set { value = newValue }
     }
     
     /// Initializes from initial value storage it and storage observers.
