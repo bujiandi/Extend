@@ -53,6 +53,11 @@ public struct Observable<Value> {
         }
     }
     
+    @inlinable public var wrapperValue: Value {
+        get { return value }
+        set { value = newValue }
+    }
+    
     /// Initializes from initial value storage it and storage observers.
     public init(initialValue: Value) {
         var storeValue:Value = initialValue
