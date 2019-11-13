@@ -12,22 +12,6 @@ let package = Package(
         .tvOS(.v9),
     ],
     products: [
-        // Displayer protocol
-        .library(
-            name: "Adapter",
-            targets: ["Adapter"]),
-        // Custom protocols
-        .library(
-            name: "Protocolar",
-            targets: ["Protocolar"]),
-        // Custom operators
-        .library(
-            name: "Operator",
-            targets: ["Operator"]),
-        // Extend [String, Array, Date, Utils]
-        .library(
-            name: "Extend",
-            targets: ["Extend"]),
         // Codable dynamic JSON
         .library(
             name: "JSON",
@@ -89,17 +73,8 @@ let package = Package(
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
-            name: "Adapter",
-            dependencies: []),
-        .target(
-            name: "Protocolar",
-            dependencies: []),
-        .target(
-            name: "Operator",
-            dependencies: ["Protocolar"]),
-        .target(
             name: "Extend",
-            dependencies: ["Protocolar", "Operator", "Adapter"],
+            dependencies: [],
             swiftSettings: [
                 .define("DEBUG", .when(configuration: .debug)),
             ]),
@@ -148,7 +123,7 @@ let package = Package(
             dependencies: []),
         .testTarget(
             name: "DataBaseTests",
-            dependencies: ["DataBase"]),
+            dependencies: ["Extend", "DataBase"]),
         .target(
             name: "SQLite",
             dependencies: ["DataBase"],

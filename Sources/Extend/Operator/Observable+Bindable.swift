@@ -5,10 +5,10 @@
 //  Created by bujiandi on 2019/6/19.
 //
 
-import Operator
-import Protocolar
+//import Operator
+//import Protocolar
 import Foundation
-import Adapter
+//import Adapter
 
 public struct BindingProperty<Object: AnyObject, Value> {
     public let obj:Object

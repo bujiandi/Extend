@@ -5,7 +5,8 @@
 //  Created by bujiandi on 2019/5/16.
 //
 
-import Protocolar
+//import Protocolar
+infix /* 中置 */ operator ??? : DefaultPrecedence
 
 /// 排除 isEmpty 的情况
 @inlinable public func ???<T:Emptiable>(lhs: T?, rhs: @autoclosure () -> T?) -> T? {

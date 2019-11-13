@@ -1,12 +1,13 @@
 import XCTest
+import Extend
 @testable import DataBase
 
 final class DataBaseTests: XCTestCase {
     
-    func testDebugFlag() {
-        
-        XCTAssertEqual(Extent.isRelease, false)
-    }
+//    func testDebugFlag() {
+//        
+//        XCTAssertEqual(Extent.isRelease, false)
+//    }
     
     func testExample() {
         let path:Path = "Users/Swift/CodeSpaces/Swift/CustomLib/HTTP/"
