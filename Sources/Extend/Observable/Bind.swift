@@ -90,6 +90,6 @@ public struct Bind<T:AnyObject> {
 
 
 extension NSObjectProtocol {
-    var bind:Bind<Self> { return Bind<Self>(wrappedValue: self) }
+    public var bind:Bind<Self> { return Bind<Self>(wrappedValue: self) }
 }
 #endif
