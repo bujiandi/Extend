@@ -59,7 +59,7 @@ public struct Observable<Value> {
     }
     
     /// Initializes from initial value storage it and storage observers.
-    public init(initialValue: Value) {
+    public init(wrappedValue initialValue: Value) {
         var storeValue:Value = initialValue
         getValue = { storeValue }
         setValue = { storeValue = $0 }
