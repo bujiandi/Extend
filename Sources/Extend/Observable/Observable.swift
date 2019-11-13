@@ -153,7 +153,7 @@ extension Observable {
     
     /// Initializes from initial value storage it and storage observers.
     public init(_ value: Value) {
-        self = Observable<Value>(initialValue: value)
+        self = Observable<Value>(wrappedValue: value)
     }
     
     private func publishValue(from oldValue: Value, to newValue: Value) {

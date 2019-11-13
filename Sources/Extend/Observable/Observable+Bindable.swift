@@ -7,8 +7,8 @@
 
 //import Operator
 //import Protocolar
-import Foundation
 //import Adapter
+import Foundation
 
 public struct BindingProperty<Object: AnyObject, Value> {
     public let obj:Object
