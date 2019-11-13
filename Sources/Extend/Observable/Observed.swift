@@ -5,7 +5,7 @@
 //  Created by bujiandi on 2018/11/24.
 //
 
-import Protocolar
+//import Protocolar
 
 public struct Observed<This, Value> where This : AnyObject {
     

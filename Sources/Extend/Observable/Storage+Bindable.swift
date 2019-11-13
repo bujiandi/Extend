@@ -5,9 +5,9 @@
 //  Created by bujiandi on 2018/11/24.
 //
 
-import Protocolar
+//import Protocolar
 import Foundation
-import Adapter
+//import Adapter
 
 extension NSObject: Bindable {}
 

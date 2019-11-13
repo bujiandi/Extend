@@ -7,8 +7,8 @@
 
 import Foundation
 
-@_exported import Operator
-@_exported import Protocolar
+//@_exported import Operator
+//@_exported import Protocolar
 @_exported import Extend
 
 public struct HTTP {
