@@ -12,6 +12,9 @@ let package = Package(
         .tvOS(.v9),
     ],
     products: [
+        .library(
+            name: "Extend",
+            targets: ["Extend"]),
         // Codable dynamic JSON
         .library(
             name: "JSON",
